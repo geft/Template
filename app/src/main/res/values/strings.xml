@@ -7,4 +7,5 @@
     <string name="login_button">LOGIN</string>
     <string name="login_no_account">Don\'t have an account?</string>
     <string name="login_sign_up_here">Signup here</string>
+    <string name="error_generic">Error</string>
 </resources>
