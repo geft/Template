@@ -1,5 +1,6 @@
 package com.gerryjuans.template.login
 
+import android.content.Context
 import android.content.Intent
 import android.view.LayoutInflater
 import androidx.core.content.ContextCompat
@@ -12,9 +13,16 @@ import com.google.android.material.snackbar.Snackbar
 
 class LoginActivity : BaseActivity<LoginView, LoginPresenter, LoginModel>(), LoginView {
 
+    private companion object {
+        const val KEY = "LOGIN"
+    }
+
     private lateinit var binding: ActivityLoginBinding
 
-    override fun createPresenter() = LoginPresenter(LoginProvider())
+    override fun createPresenter() = LoginPresenter(
+        LoginProvider(),
+        getSharedPreferences(KEY, Context.MODE_PRIVATE)
+    )
 
     override fun getActivityView() = this
 
@@ -25,14 +33,37 @@ class LoginActivity : BaseActivity<LoginView, LoginPresenter, LoginModel>(), Log
 
         setContentView(binding.root)
         initButton()
+        initEmail()
+        initPassword()
     }
 
     private fun initButton() {
         binding.buttonAction.setThrottleListener {
-            presenter.login(
-                binding.fieldEmail.text.toString(),
-                binding.fieldPassword.text.toString()
-            )
+            val email = binding.fieldEmail.text.toString()
+            val password = binding.fieldPassword.text.toString()
+
+            if (binding.checkbox.isChecked) {
+                presenter.save(email, password)
+            }
+
+            presenter.login(email, password)
+        }
+    }
+
+    private fun initEmail() {
+        binding.fieldEmail.post {
+            val email = presenter.loadEmail()
+
+            if (email.isNotBlank()) {
+                binding.fieldEmail.setText(email)
+                binding.checkbox.isChecked = true
+            }
+        }
+    }
+
+    private fun initPassword() {
+        binding.fieldPassword.post {
+            binding.fieldPassword.setText(presenter.loadPassword())
         }
     }
 
