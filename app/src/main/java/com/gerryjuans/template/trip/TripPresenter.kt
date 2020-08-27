@@ -6,7 +6,8 @@ import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.schedulers.Schedulers
 
 class TripPresenter(
-    private val tripProvider: TripProvider
+    private val tripProvider: TripProvider,
+    private val tripAddProvider: TripAddProvider
 ) : BasePresenter<TripView, TripModel>() {
 
     override fun createViewModel() = TripModel()
@@ -33,16 +34,15 @@ class TripPresenter(
     }
 
     fun loadSavedTrip(): TripResponse.Data? {
-        return tripProvider.loadSavedTrip()
+        return tripAddProvider.loadSavedTrip()
     }
 
     fun saveTrip(data: TripResponse.Data) {
-        tripProvider.saveTripLocally(data)
+        tripAddProvider.saveTripLocally(data)
 
         compositeDisposable.add(
-            tripProvider.saveTripToServer(
+            tripAddProvider.saveTripToServer(
                 TripResponse(
-                    data.id,
                     data.startStation,
                     data.endStation,
                     data.arrivalTime,
@@ -56,6 +56,7 @@ class TripPresenter(
                 .subscribe(
                     {
                         if (true) {
+                            view?.repopulate()
                             view?.showTripAdded()
                         } else {
                             view?.showError()

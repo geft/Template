@@ -19,10 +19,11 @@ abstract class BaseApiProvider<R> {
     fun get(response: Call<R>): Single<R> {
         return Single.fromCallable {
             val execute = response.execute()
-            Log.d(this.javaClass.name, "<REQ>: ${execute.raw().request().url()}")
+            Log.d(this.javaClass.name, "<REQ>: ${execute.raw().request()}")
             val body = execute.body()
 
             if (body == null) {
+                Log.d(this.javaClass.name, "error: ${execute.message()}")
                 throw IllegalStateException("Server down or Rate limited")
             } else {
                 Log.d(this.javaClass.name, "<RES>: ${Gson().toJson(body)}")

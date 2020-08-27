@@ -23,7 +23,11 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".trip.TripActivity" android:screenOrientation="portrait" />
+        <activity
+            android:name=".trip.TripActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustResize"
+            />
     </application>
 
 </manifest>

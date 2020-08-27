@@ -11,5 +11,5 @@ interface TripService {
     fun loadTrip(): Call<List<TripResponse>>
 
     @POST("bb3e04164c1c481cbeef27f8f6dea22b/trips")
-    fun saveTrip(@Body request: TripResponse): Call<List<TripResponse>>
+    fun saveTrip(@Body request: TripResponse): Call<TripResponse>
 }

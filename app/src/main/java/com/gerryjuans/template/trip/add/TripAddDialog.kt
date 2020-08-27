@@ -89,7 +89,6 @@ class TripAddDialog(
         binding.buttonAction.setThrottleListener {
             onComplete.invoke(
                 TripResponse.Data(
-                    "",
                     binding.fieldFrom.text.toString(),
                     binding.fieldTo.text.toString(),
                     binding.fieldEta.text.toString(),
@@ -98,6 +97,7 @@ class TripAddDialog(
                     LocalDateTime.now().format(DateTimeFormatter.ofPattern("YYYY-MM-dd HH:mm:ss"))
                 )
             )
+            dismiss()
         }
     }
 }

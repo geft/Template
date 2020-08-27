@@ -6,6 +6,8 @@ interface TripView : BaseView {
 
     fun populate(list: List<TripResponse.Data>)
 
+    fun repopulate()
+
     fun showTripAdded();
 
     fun showError()

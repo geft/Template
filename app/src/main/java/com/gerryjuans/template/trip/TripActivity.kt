@@ -18,8 +18,13 @@ class TripActivity : BaseActivity<TripView, TripPresenter, TripModel>(), TripVie
 
     private lateinit var binding: ActivityTripBinding
 
-    override fun createPresenter() =
-        TripPresenter(TripProvider(getSharedPreferences(KEY_TRIP, Context.MODE_PRIVATE)))
+    override fun createPresenter(): TripPresenter {
+        val sharedPref = getSharedPreferences(KEY_TRIP, Context.MODE_PRIVATE)
+        return TripPresenter(
+            TripProvider(),
+            TripAddProvider(sharedPref)
+        )
+    }
 
     override fun getActivityView() = this
 
@@ -43,6 +48,10 @@ class TripActivity : BaseActivity<TripView, TripPresenter, TripModel>(), TripVie
 
     override fun populate(list: List<TripResponse.Data>) {
         binding.recyclerView.adapter = TripAdapter(this, list)
+    }
+
+    override fun repopulate() {
+        presenter.loadTrip()
     }
 
     override fun showTripAdded() {

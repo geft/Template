@@ -19,7 +19,6 @@ import kotlinx.android.parcel.Parcelize
 }
  */
 data class TripResponse(
-    @SerializedName("_id") val id: String?,
     @SerializedName("start_station") val startStation: String?,
     @SerializedName("end_station") val endStation: String?,
     @SerializedName("eta") val eta: String?,
@@ -29,7 +28,6 @@ data class TripResponse(
 ) {
 
     fun toTripData() = Data(
-        id = id ?: "-",
         startStation = startStation ?: "-",
         endStation = endStation ?: "-",
         arrivalTime = eta ?: "-",
@@ -40,7 +38,6 @@ data class TripResponse(
 
     @Parcelize
     data class Data(
-        val id: String,
         val startStation: String,
         val endStation: String,
         val arrivalTime: String,
