@@ -7,7 +7,7 @@ import androidx.core.content.ContextCompat
 import com.gerryjuans.template.R
 import com.gerryjuans.template.base.BaseActivity
 import com.gerryjuans.template.databinding.ActivityLoginBinding
-import com.gerryjuans.template.result.ResultActivity
+import com.gerryjuans.template.trip.TripActivity
 import com.gerryjuans.template.util.setThrottleListener
 import com.google.android.material.snackbar.Snackbar
 
@@ -68,7 +68,7 @@ class LoginActivity : BaseActivity<LoginView, LoginPresenter, LoginModel>(), Log
     }
 
     override fun navigateToResult() {
-        startActivity(Intent(this, ResultActivity::class.java))
+        startActivity(Intent(this, TripActivity::class.java))
     }
 
     override fun showError() {

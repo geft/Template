@@ -8,4 +8,17 @@
     <string name="login_no_account">Don\'t have an account?</string>
     <string name="login_sign_up_here">Signup here</string>
     <string name="error_generic">Error</string>
+    <string name="trip_welcome">Hi Saby! Welcome to Facio, you are ready to go now!</string>
+    <string name="trip_header">Trips List</string>
+    <string name="trip_add">Add Trip</string>
+    <string name="trip_add_success">Trip added successfully</string>
+    <string name="trip_status_pending">Pending</string>
+    <string name="trip_status_transit">Transit</string>
+    <string name="trip_status_completed">Completed</string>
+    <string name="trip_add_from">From Station</string>
+    <string name="trip_add_to">To Station</string>
+    <string name="trip_add_driver">Driver Name</string>
+    <string name="trip_add_status">Status</string>
+    <string name="trip_add_eta">ETA</string>
+    <string name="trip_add_button">Create Trip</string>
 </resources>
