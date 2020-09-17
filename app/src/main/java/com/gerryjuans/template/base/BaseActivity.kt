@@ -10,6 +10,8 @@ abstract class BaseActivity<V: BaseView, P : BasePresenter<V, M>, M : BaseModel>
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        injectComponent()
+
         presenter = createPresenter()
         presenter.setActivityView(getActivityView())
 
@@ -24,6 +26,8 @@ abstract class BaseActivity<V: BaseView, P : BasePresenter<V, M>, M : BaseModel>
     }
 
     protected abstract fun createPresenter(): P
+
+    protected abstract fun injectComponent()
 
     protected abstract fun getActivityView(): V
 

@@ -1,4 +1,4 @@
-package com.gerryjuans.template.api
+package com.gerryjuans.template.base
 
 import android.util.Log
 import com.google.gson.Gson

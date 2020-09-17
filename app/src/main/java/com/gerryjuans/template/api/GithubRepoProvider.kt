@@ -1,5 +1,7 @@
 package com.gerryjuans.template.api
 
+import com.gerryjuans.template.base.BaseApiProvider
+
 class GithubRepoProvider : BaseApiProvider<GithubRepo>() {
 
     private companion object {
