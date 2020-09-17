@@ -1,10 +1,28 @@
 <resources>
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+    <style name="AppTheme" parent="Theme.AppCompat.Light">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
     </style>
+
+    <style name="TextItemName" parent="TextAppearance.AppCompat">
+        <item name="android:fontFamily">sans-serif-medium</item>
+        <item name="android:textSize">15sp</item>
+        <item name="android:textColor">@color/textContent</item>
+    </style>
+
+    <style name="TextContent" parent="TextAppearance.AppCompat">
+        <item name="android:fontFamily">sans-serif</item>
+        <item name="android:textSize">12sp</item>
+        <item name="android:textColor">@color/textContent</item>
+    </style>
+
+    <style name="TextItemAuthor" parent="TextContent"/>
+    <style name="TextItemDescription" parent="TextContent"/>
+    <style name="TextItemLanguage" parent="TextContent"/>
+    <style name="TextItemStar" parent="TextContent"/>
+    <style name="TextItemFork" parent="TextContent"/>
 
 </resources>
