@@ -10,6 +10,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 abstract class BaseApiProvider<R> {
 
+    // create service after obtaining the request interface and then execute
     fun createRequestInterface(): Retrofit = Retrofit.Builder()
         .baseUrl(getBaseUrl())
         .addConverterFactory(GsonConverterFactory.create())

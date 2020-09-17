@@ -6,5 +6,5 @@ import retrofit2.http.GET
 interface GithubRepoService {
 
     @GET("repositories")
-    fun getRepos(request: GithubRequest): Call<List<GithubRepo>>
+    fun getRepos(): Call<List<GithubRepo>>
 }
