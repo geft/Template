@@ -3,14 +3,14 @@ package com.gerryjuans.template.trending
 import android.view.LayoutInflater
 import com.gerryjuans.template.base.BaseActivity
 import com.gerryjuans.template.databinding.TrendingActivityBinding
-import com.gerryjuans.template.di.PresenterComponent
+import com.gerryjuans.template.di.AppComponent
 import com.gerryjuans.template.di.buildComponent
 import javax.inject.Inject
 
 class TrendingActivity : BaseActivity<TrendingView, TrendingPresenter, TrendingModel>(), TrendingView {
 
     @Inject
-    lateinit var presenterComponent: PresenterComponent
+    lateinit var appComponent: AppComponent
 
     private lateinit var binding: TrendingActivityBinding
 
@@ -18,7 +18,7 @@ class TrendingActivity : BaseActivity<TrendingView, TrendingPresenter, TrendingM
         buildComponent().inject(this)
     }
 
-    override fun createPresenter() = presenterComponent.createTrendingPresenter()
+    override fun createPresenter() = appComponent.createTrendingPresenter()
 
     override fun getActivityView() = this
 
