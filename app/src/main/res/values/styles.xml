@@ -25,4 +25,15 @@
     <style name="TextItemStar" parent="TextContent"/>
     <style name="TextItemFork" parent="TextContent"/>
 
+    <style name="TextErrorTitle" parent="TextAppearance.AppCompat">
+        <item name="android:textColor">@color/textPrimary</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textSize">18sp</item>
+    </style>
+
+    <style name="TextErrorDescription" parent="TextAppearance.AppCompat">
+        <item name="android:textColor">@color/textSecondary</item>
+        <item name="android:textSize">15sp</item>
+    </style>
+
 </resources>
