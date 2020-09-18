@@ -24,6 +24,7 @@ class TrendingAdapter(
     private val elevationHeight = 4 * context.resources.displayMetrics.density;
     private val avatarPlaceHolder = ContextCompat.getDrawable(context, R.drawable.placeholder_avatar)
     private val numberFormat = NumberFormat.getNumberInstance(Locale.ENGLISH)
+    private val expandedItems = mutableListOf<Pair<Int, GithubRepo>>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val binding = TrendingItemBinding.inflate(
@@ -48,7 +49,7 @@ class TrendingAdapter(
             it.fork.text = numberFormat.format(item.forks)
             it.content.visibility = if (item.expanded) View.VISIBLE else View.GONE
             it.itemView.setThrottleListener {
-                toggle(item, it.content, it.name.measuredWidth)
+                toggle(item, it.content, it.name.measuredWidth, position)
                 it.itemView.elevation = if (item.expanded) elevationHeight else 0f
             }
             it.itemView.elevation = if (item.expanded) elevationHeight else 0f
@@ -61,14 +62,31 @@ class TrendingAdapter(
         }
     }
 
-    private fun toggle(item: GithubRepo, container: ViewGroup, maxWidth: Int) {
+    private fun toggle(
+        item: GithubRepo,
+        container: ViewGroup,
+        maxWidth: Int,
+        position: Int
+    ) {
         if (item.expanded) {
             animateCollapse(container)
             item.expanded = false
         } else {
+            collapseAllExpandedItems()
             animateExpand(container, maxWidth, item)
             item.expanded = true
+            expandedItems.add(position to item)
         }
+    }
+
+    private fun collapseAllExpandedItems() {
+        for (pair in expandedItems) {
+            val index = pair.first
+            val item = pair.second
+            item.expanded = false
+            notifyItemChanged(index)
+        }
+        expandedItems.clear()
     }
 
     private fun animateExpand(view: View, maxWidth: Int, item: GithubRepo) {
@@ -108,6 +126,11 @@ class TrendingAdapter(
                 })
             }
             .start()
+    }
+
+    fun updateList(items: List<GithubRepo>) {
+        this.items = items
+        notifyDataSetChanged()
     }
 
     private class Holder(

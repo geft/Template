@@ -32,6 +32,7 @@ class TrendingActivity : BaseActivity<TrendingView, TrendingPresenter, TrendingM
         setContentView(binding.root)
         initMenu()
         initRetry()
+        initRecyclerView()
         presenter.populate()
     }
 
@@ -58,8 +59,13 @@ class TrendingActivity : BaseActivity<TrendingView, TrendingPresenter, TrendingM
         }
     }
 
+    private fun initRecyclerView() {
+        binding.recyclerView.adapter = TrendingAdapter(this, emptyList())
+        binding.recyclerView.itemAnimator = null
+    }
+
     override fun updateList(items: List<GithubRepo>) {
-        binding.recyclerView.adapter = TrendingAdapter(this, items)
+        (binding.recyclerView.adapter as TrendingAdapter).updateList(items)
     }
 
     override fun showLoading() {
