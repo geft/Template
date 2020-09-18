@@ -69,7 +69,7 @@ class TrendingActivity : BaseActivity<TrendingView, TrendingPresenter, TrendingM
     private fun initSwipeRefresh() {
         binding.containerSwipe.setOnRefreshListener {
             binding.containerSwipe.isRefreshing = true
-            presenter.populate()
+            presenter.populateFromApi()
         }
     }
 

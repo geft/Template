@@ -5,6 +5,7 @@ import com.google.gson.Gson
 import javax.inject.Inject
 
 class TrendingProvider @Inject constructor(
+    private val gson: Gson,
     private val sharedPreferences: SharedPreferences
 ) {
 
@@ -14,7 +15,7 @@ class TrendingProvider @Inject constructor(
 
     fun save(model: TrendingModel) {
         sharedPreferences.edit()
-            .putString(KEY_MODEL, Gson().toJson(model))
+            .putString(KEY_MODEL, gson.toJson(model))
             .apply()
     }
 
@@ -23,7 +24,7 @@ class TrendingProvider @Inject constructor(
         if (data == null) {
             return null
         } else {
-            return Gson().fromJson(data, TrendingModel::class.java)
+            return gson.fromJson(data, TrendingModel::class.java)
         }
     }
 }

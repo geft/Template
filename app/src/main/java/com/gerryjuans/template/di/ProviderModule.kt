@@ -2,6 +2,7 @@ package com.gerryjuans.template.di
 
 import android.content.Context
 import android.content.SharedPreferences
+import com.google.gson.Gson
 import dagger.Module
 import dagger.Provides
 
@@ -16,6 +17,9 @@ class ProviderModule(
 
     @Provides
     fun provideContext(): Context = context
+
+    @Provides
+    fun provideGson(): Gson = Gson()
 
     @Provides
     fun provideSharedPreferences(): SharedPreferences =
