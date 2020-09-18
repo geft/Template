@@ -11,12 +11,9 @@ class ErrorView @JvmOverloads constructor(
     context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
 ) : FrameLayout(context, attrs, defStyleAttr) {
 
-    private var binding: TrendingErrorBinding =
-        TrendingErrorBinding.inflate(LayoutInflater.from(context))
-
-    init {
-        addView(binding.root)
-    }
+    private var binding = TrendingErrorBinding.inflate(
+        LayoutInflater.from(context), this, true
+    )
 
     fun setButtonClickedListener(onClicked: () -> Unit) {
         binding.button.setThrottleListener { onClicked() }
