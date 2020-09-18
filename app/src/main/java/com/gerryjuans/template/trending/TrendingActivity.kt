@@ -20,7 +20,7 @@ class TrendingActivity : BaseActivity<TrendingView, TrendingPresenter, TrendingM
     private lateinit var binding: TrendingActivityBinding
 
     override fun injectComponent() {
-        buildComponent().inject(this)
+        buildComponent(this).inject(this)
     }
 
     override fun createPresenter() = appComponent.createTrendingPresenter()

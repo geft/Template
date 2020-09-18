@@ -1,3 +1,8 @@
 package com.gerryjuans.template.di
 
-fun buildComponent() = DaggerAppComponent.builder().build()
+import android.content.Context
+
+fun buildComponent(context: Context): AppComponent =
+    DaggerAppComponent.builder()
+        .providerModule(ProviderModule(context))
+        .build()
