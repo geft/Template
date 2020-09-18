@@ -2,6 +2,7 @@ package com.gerryjuans.template.trending
 
 import android.animation.Animator
 import android.animation.ValueAnimator
+import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -15,9 +16,11 @@ import java.text.NumberFormat
 import java.util.*
 
 class TrendingAdapter(
+    context: Context,
     private var items: List<GithubRepo>
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
+    private val elevationHeight = 8 * context.resources.displayMetrics.density;
     private val numberFormat = NumberFormat.getNumberInstance(Locale.ENGLISH)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
@@ -44,7 +47,11 @@ class TrendingAdapter(
             it.star.text = numberFormat.format(item.stars)
             it.fork.text = numberFormat.format(item.forks)
             it.content.visibility = if (item.expanded) View.VISIBLE else View.GONE
-            it.itemView.setThrottleListener { toggle(item, it.content, it.name.measuredWidth) }
+            it.itemView.setThrottleListener {
+                toggle(item, it.content, it.name.measuredWidth)
+                it.itemView.elevation = if (item.expanded) elevationHeight else 0f
+            }
+            it.itemView.elevation = if (item.expanded) elevationHeight else 0f
         }
     }
 
@@ -75,7 +82,7 @@ class TrendingAdapter(
 
         ValueAnimator.ofInt(start, end)
             .apply {
-                duration = 200
+                duration = 100
                 addUpdateListener {
                     val height = it.animatedValue as Int
                     val param = view.layoutParams

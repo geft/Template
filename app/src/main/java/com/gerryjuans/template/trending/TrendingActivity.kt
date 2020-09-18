@@ -39,7 +39,7 @@ class TrendingActivity : BaseActivity<TrendingView, TrendingPresenter, TrendingM
     }
 
     override fun updateList(items: List<GithubRepo>) {
-        binding.recyclerView.adapter = TrendingAdapter(items)
+        binding.recyclerView.adapter = TrendingAdapter(this, items)
     }
 
     override fun showLoading() {
