@@ -4,9 +4,8 @@ import android.util.Log
 import com.gerryjuans.template.api.GithubRepo
 import com.gerryjuans.template.api.GithubRepoProvider
 import com.gerryjuans.template.base.BasePresenter
+import com.gerryjuans.template.trending.usecase.TrendingPopulator
 import com.gerryjuans.template.trending.usecase.TrendingTimeChecker
-import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
-import io.reactivex.rxjava3.schedulers.Schedulers
 import org.threeten.bp.LocalDateTime
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -15,6 +14,7 @@ import javax.inject.Singleton
 class TrendingPresenter @Inject constructor(
     private val repoProvider: GithubRepoProvider,
     private val trendingProvider: TrendingProvider,
+    private val trendingPopulator: TrendingPopulator,
     private val timeChecker: TrendingTimeChecker
 ) : BasePresenter<TrendingView, TrendingModel>() {
 
@@ -31,16 +31,11 @@ class TrendingPresenter @Inject constructor(
 
     private fun populateFromApi() {
         compositeDisposable.add(
-            repoProvider.getRepos()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .doOnSubscribe { view?.showLoading() }
-                .doFinally { view?.stopLoading() }
-                .doOnError { view?.showError() }
-                .subscribe({
-                    if (it.isNullOrEmpty()) throw IllegalStateException("list is null or empty")
-                    updateList(it, LocalDateTime.now())
-                }, { Log.e(this.javaClass.name, it.message, it) })
+            trendingPopulator.getPopulateDisposable(
+                view = view,
+                onSuccess = { updateList(it, LocalDateTime.now()) },
+                logOnError = { Log.e(this.javaClass.name, it.message, it) }
+            )
         )
     }
 
