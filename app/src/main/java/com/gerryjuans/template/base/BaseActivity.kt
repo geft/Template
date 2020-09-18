@@ -15,7 +15,7 @@ abstract class BaseActivity<V: BaseView, P : BasePresenter<V, M>, M : BaseModel>
         presenter = createPresenter()
         presenter.setActivityView(getActivityView())
 
-        onInitView()
+        onInitView(savedInstanceState)
     }
 
     override fun onDestroy() {
@@ -31,5 +31,5 @@ abstract class BaseActivity<V: BaseView, P : BasePresenter<V, M>, M : BaseModel>
 
     protected abstract fun getActivityView(): V
 
-    protected abstract fun onInitView()
+    protected abstract fun onInitView(savedInstanceState: Bundle?)
 }

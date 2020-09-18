@@ -1,5 +1,6 @@
 package com.gerryjuans.template.trending
 
+import android.os.Bundle
 import android.util.Log
 import com.gerryjuans.template.api.GithubRepo
 import com.gerryjuans.template.base.BasePresenter
@@ -24,6 +25,7 @@ class TrendingPresenter @Inject constructor(
             populateFromApi()
         } else {
             view?.updateList(prevData.items)
+            view?.scrollTo(prevData.scrollPosition)
         }
     }
 
@@ -47,11 +49,29 @@ class TrendingPresenter @Inject constructor(
     }
 
     fun sortBy(type: SortType) {
-        view?.updateList(type.getSortedItems(model.items))
+        model.items = type.getSortedItems(model.items)
+        view?.updateList(model.items)
+    }
+
+    fun saveToBundle(bundle: Bundle, scrollPosition: Int) {
+        model.scrollPosition = scrollPosition
+        bundle.putParcelable(KEY_MODEL, model)
+    }
+
+    fun restoreFromBundle(bundle: Bundle) {
+        bundle.getParcelable<TrendingModel>(KEY_MODEL)?.let {
+            model.items = it.items
+            model.time = it.time
+            model.scrollPosition = it.scrollPosition
+        }
     }
 
     enum class SortType(val getSortedItems: (List<GithubRepo>) -> List<GithubRepo>) {
         NAME    ( { items -> items.sortedBy { it.name } } ),
         STARS   ( { items -> items.sortedByDescending { it.stars } } )
+    }
+
+    private companion object {
+        const val KEY_MODEL = "BUNDLE"
     }
 }

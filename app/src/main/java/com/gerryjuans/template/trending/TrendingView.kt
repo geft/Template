@@ -7,6 +7,8 @@ interface TrendingView : BaseView {
 
     fun updateList(items: List<GithubRepo>)
 
+    fun scrollTo(position: Int)
+
     fun showLoading()
 
     fun stopLoading()

@@ -8,5 +8,6 @@ import org.threeten.bp.LocalDateTime
 @Parcelize
 class TrendingModel(
     var items: List<GithubRepo> = emptyList(),
-    var time: LocalDateTime? = null
+    var time: LocalDateTime? = null,
+    var scrollPosition: Int = 0
 ) : BaseModel()

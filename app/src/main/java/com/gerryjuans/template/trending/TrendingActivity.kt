@@ -1,8 +1,10 @@
 package com.gerryjuans.template.trending
 
+import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.PopupMenu
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.gerryjuans.template.R
 import com.gerryjuans.template.api.GithubRepo
 import com.gerryjuans.template.base.BaseActivity
@@ -27,7 +29,7 @@ class TrendingActivity : BaseActivity<TrendingView, TrendingPresenter, TrendingM
 
     override fun getActivityView() = this
 
-    override fun onInitView() {
+    override fun onInitView(savedInstanceState: Bundle?) {
         binding = TrendingActivityBinding.inflate(LayoutInflater.from(this))
         setContentView(binding.root)
         initMenu()
@@ -35,6 +37,7 @@ class TrendingActivity : BaseActivity<TrendingView, TrendingPresenter, TrendingM
         initRecyclerView()
         initSwipeRefresh()
 
+        savedInstanceState?.let { presenter.restoreFromBundle(it) }
         presenter.populate()
     }
 
@@ -78,6 +81,14 @@ class TrendingActivity : BaseActivity<TrendingView, TrendingPresenter, TrendingM
         binding.containerSwipe.isRefreshing = false
     }
 
+    override fun scrollTo(position: Int) {
+        binding.recyclerView.let {
+            if ((position <= (it.adapter as TrendingAdapter).itemCount - 1)) {
+                (it.layoutManager as LinearLayoutManager).scrollToPosition(position)
+            }
+        }
+    }
+
     override fun showLoading() {
         binding.placeholder.show()
     }
@@ -92,5 +103,12 @@ class TrendingActivity : BaseActivity<TrendingView, TrendingPresenter, TrendingM
 
     override fun hideError() {
         binding.containerError.visibility = View.GONE
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        val scrollPosition = (binding.recyclerView.layoutManager as LinearLayoutManager)
+            .findFirstVisibleItemPosition()
+        presenter.saveToBundle(outState, scrollPosition)
     }
 }
