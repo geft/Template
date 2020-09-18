@@ -29,7 +29,7 @@ class TrendingPlaceHolder @JvmOverloads constructor(
     fun show() {
         hideShimmer()
         visibility = View.VISIBLE
-        startShimmer()
+        showShimmer(true)
     }
 
     fun hide() {
