@@ -4,9 +4,8 @@ import android.os.Bundle
 import android.util.Log
 import com.gerryjuans.template.api.GithubRepo
 import com.gerryjuans.template.base.BasePresenter
+import com.gerryjuans.template.trending.usecase.TrendingLoader
 import com.gerryjuans.template.trending.usecase.TrendingPopulator
-import com.gerryjuans.template.trending.usecase.TrendingTimeChecker
-import org.threeten.bp.LocalDateTime
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -14,56 +13,52 @@ import javax.inject.Singleton
 class TrendingPresenter @Inject constructor(
     private val trendingProvider: TrendingProvider,
     private val trendingPopulator: TrendingPopulator,
-    private val timeChecker: TrendingTimeChecker
-) : BasePresenter<TrendingView, TrendingModel>() {
+    private val trendingLoader: TrendingLoader
+) : BasePresenter<TrendingView, TrendingModel>(), TrendingLoader.Callback {
+
+    override var isLoaded = false
 
     override fun createViewModel() = TrendingModel()
 
     fun populate() {
-        val prevData = trendingProvider.load()
-        if (prevData == null || timeChecker.isDataExpired(prevData.time)) {
-            populateFromApi()
-        } else {
-            model.load(prevData)
-            view?.updateList(prevData.items)
-            view?.scrollTo(prevData.scrollPosition)
-        }
+        trendingLoader.load(this)
     }
 
-    fun populateFromApi() {
+    override fun updateModel(data: TrendingModel) {
+        model.update(data)
+    }
+
+    override fun updateListAndScroll() {
+        view?.updateList(model.items)
+        view?.scrollTo(model.scrollPosition)
+    }
+
+    override fun populateFromApi() {
         compositeDisposable.add(
             trendingPopulator.getPopulateDisposable(
                 view = view,
                 onSuccess = {
-                    updateModelAndSave(it)
-                    view?.updateList(it)
+                    model.refreshFromApi(it)
+                    trendingProvider.save(model)
+                    updateListAndScroll()
+                    isLoaded = true
                 },
-                logOnError = { Log.e(this.javaClass.name, it.message, it) }
+                onError = { Log.e(this.javaClass.name, it.message, it) }
             )
         )
     }
 
-    private fun updateModelAndSave(it: List<GithubRepo>) {
-        model.items = it
-        model.time = LocalDateTime.now()
-        trendingProvider.save(model)
-    }
-
     fun sortBy(type: SortType) {
-        model.items = type.getSortedItems(model.items)
-        view?.updateList(model.items)
+        model.refreshFromSort(type.getSortedItems(model.items))
+        updateListAndScroll()
     }
 
-    fun saveToBundle(bundle: Bundle, scrollPosition: Int) {
-        model.scrollPosition = scrollPosition
+    fun saveToBundle(bundle: Bundle) {
         bundle.putParcelable(KEY_MODEL, model)
-        trendingProvider.save(model)
     }
 
     fun restoreFromBundle(bundle: Bundle) {
-        bundle.getParcelable<TrendingModel>(KEY_MODEL)?.let {
-            model.load(it)
-        }
+        bundle.getParcelable<TrendingModel>(KEY_MODEL)?.let { model.update(it) }
     }
 
     fun updateScrollPosition(scrollPosition: Int) {

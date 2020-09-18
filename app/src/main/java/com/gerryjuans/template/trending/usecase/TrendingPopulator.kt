@@ -14,7 +14,7 @@ class TrendingPopulator @Inject constructor (
 
     fun getPopulateDisposable(view: TrendingView?,
                               onSuccess: (List<GithubRepo>) -> Unit,
-                              logOnError: (Throwable) -> Unit
+                              onError: (Throwable) -> Unit
     ): Disposable {
         return repoProvider.getRepos()
             .subscribeOn(Schedulers.io())
@@ -25,6 +25,6 @@ class TrendingPopulator @Inject constructor (
             .subscribe({
                 if (it.isNullOrEmpty()) throw IllegalStateException("list is null or empty")
                 onSuccess(it)
-            }, { logOnError(it) })
+            }, { onError(it) })
     }
 }

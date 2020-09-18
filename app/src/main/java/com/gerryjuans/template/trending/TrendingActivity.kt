@@ -5,20 +5,15 @@ import android.view.LayoutInflater
 import android.view.View
 import android.widget.PopupMenu
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.gerryjuans.template.R
 import com.gerryjuans.template.api.GithubRepo
 import com.gerryjuans.template.base.BaseActivity
+import com.gerryjuans.template.base.BaseApplication
 import com.gerryjuans.template.databinding.TrendingActivityBinding
-import com.gerryjuans.template.di.AppComponent
 import com.gerryjuans.template.di.buildComponent
 import com.gerryjuans.template.util.setThrottleListener
-import javax.inject.Inject
 
 class TrendingActivity : BaseActivity<TrendingView, TrendingPresenter, TrendingModel>(), TrendingView {
-
-    @Inject
-    lateinit var appComponent: AppComponent
 
     private lateinit var binding: TrendingActivityBinding
 
@@ -26,7 +21,8 @@ class TrendingActivity : BaseActivity<TrendingView, TrendingPresenter, TrendingM
         buildComponent(this).inject(this)
     }
 
-    override fun createPresenter() = appComponent.createTrendingPresenter()
+    override fun createPresenter() =
+        (applicationContext as BaseApplication).appComponent.createTrendingPresenter()
 
     override fun getActivityView() = this
 
@@ -68,16 +64,6 @@ class TrendingActivity : BaseActivity<TrendingView, TrendingPresenter, TrendingM
     private fun initRecyclerView() {
         binding.recyclerView.adapter = TrendingAdapter(this, emptyList())
         binding.recyclerView.itemAnimator = null
-        (binding.recyclerView.layoutManager as LinearLayoutManager).let {
-            binding.recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
-                override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
-                    super.onScrollStateChanged(recyclerView, newState)
-                    if (newState == RecyclerView.SCROLL_STATE_IDLE) {
-                        presenter.updateScrollPosition(it.findFirstVisibleItemPosition())
-                    }
-                }
-            })
-        }
     }
 
     private fun initSwipeRefresh() {
@@ -94,7 +80,7 @@ class TrendingActivity : BaseActivity<TrendingView, TrendingPresenter, TrendingM
 
     override fun scrollTo(position: Int) {
         binding.recyclerView.let {
-            if ((position <= (it.adapter as TrendingAdapter).itemCount - 1)) {
+            if ((position < (it.adapter as TrendingAdapter).itemCount)) {
                 (it.layoutManager as LinearLayoutManager).scrollToPosition(position)
             }
         }
@@ -118,8 +104,15 @@ class TrendingActivity : BaseActivity<TrendingView, TrendingPresenter, TrendingM
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
+
+        presenter.saveToBundle(outState)
+    }
+
+    override fun onPause() {
+        super.onPause()
+
         val scrollPosition = (binding.recyclerView.layoutManager as LinearLayoutManager)
             .findFirstVisibleItemPosition()
-        presenter.saveToBundle(outState, scrollPosition)
+        presenter.updateScrollPosition(scrollPosition)
     }
 }

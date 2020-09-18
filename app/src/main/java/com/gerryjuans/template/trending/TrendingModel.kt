@@ -12,9 +12,20 @@ class TrendingModel(
     var scrollPosition: Int = 0
 ) : BaseModel() {
 
-    fun load(data: TrendingModel) {
+    fun update(data: TrendingModel) {
         this.items = data.items
         this.time = data.time
         this.scrollPosition = data.scrollPosition
+    }
+
+    fun refreshFromApi(items: List<GithubRepo>) {
+        this.items = items
+        this.time = LocalDateTime.now()
+        this.scrollPosition = 0
+    }
+
+    fun refreshFromSort(items: List<GithubRepo>) {
+        this.items = items
+        this.scrollPosition = 0
     }
 }
