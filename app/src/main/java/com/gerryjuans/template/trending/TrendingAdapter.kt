@@ -1,5 +1,7 @@
 package com.gerryjuans.template.trending
 
+import android.animation.Animator
+import android.animation.ValueAnimator
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -42,18 +44,56 @@ class TrendingAdapter(
             it.star.text = numberFormat.format(item.stars)
             it.fork.text = numberFormat.format(item.forks)
             it.content.visibility = if (item.expanded) View.VISIBLE else View.GONE
-            it.itemView.setThrottleListener {
-                if (item.expanded) {
-                    it.content.visibility = View.GONE
-                    item.expanded = false
-                    notifyItemChanged(position)
-                } else {
-                    it.content.visibility = View.VISIBLE
-                    item.expanded = true
-                    notifyItemChanged(position)
-                }
-            }
+            it.itemView.setThrottleListener { toggle(item, it.content, it.name.measuredWidth) }
         }
+    }
+
+    private fun toggle(item: GithubRepo, container: ViewGroup, maxWidth: Int) {
+        if (item.expanded) {
+            animateCollapse(container)
+            item.expanded = false
+        } else {
+            animateExpand(container, maxWidth)
+            item.expanded = true
+        }
+    }
+
+    private fun animateExpand(view: View, maxWidth: Int) {
+        view.measure(
+            View.MeasureSpec.makeMeasureSpec(maxWidth, View.MeasureSpec.EXACTLY),
+            View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED)
+        )
+        animate(view, 0, view.measuredHeight)
+    }
+
+    private fun animateCollapse(view: View) {
+        animate(view, view.height, 0)
+    }
+
+    private fun animate(view: View, start: Int, end: Int) {
+        val isExpanding = end > start
+
+        ValueAnimator.ofInt(start, end)
+            .apply {
+                duration = 200
+                addUpdateListener {
+                    val height = it.animatedValue as Int
+                    val param = view.layoutParams
+                    param.height = height
+                    view.layoutParams = param
+                }
+                addListener(object: Animator.AnimatorListener{
+                    override fun onAnimationRepeat(animation: Animator?) {}
+                    override fun onAnimationEnd(animation: Animator?) {
+                        view.visibility = if (isExpanding) View.VISIBLE else View.GONE
+                    }
+                    override fun onAnimationCancel(animation: Animator?) {}
+                    override fun onAnimationStart(animation: Animator?) {
+                        view.visibility = View.VISIBLE
+                    }
+                })
+            }
+            .start()
     }
 
     private class Holder(
