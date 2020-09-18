@@ -52,6 +52,7 @@
         app:layout_constraintStart_toStartOf="parent"
         android:layout_margin="16dp"
         android:background="@drawable/button_error"
+        android:foreground="?attr/selectableItemBackground"
         android:textColor="@color/colorAccent"
         android:text="@string/error_cta"
         />

@@ -61,7 +61,7 @@ class TrendingActivity : BaseActivity<TrendingView, TrendingPresenter, TrendingM
     private fun initRetry() {
         binding.containerError.setButtonClickedListener {
             hideError()
-            presenter.populate()
+            presenter.populateFromApi()
         }
     }
 
