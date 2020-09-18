@@ -12,5 +12,6 @@ data class GithubRepo(
     val language: String? = "",
     val stars: Int = 0,
     val forks: Int = 0,
-    var expanded: Boolean = false
+    var expanded: Boolean = false,
+    var measuredHeight: Int = 0
 ): Parcelable

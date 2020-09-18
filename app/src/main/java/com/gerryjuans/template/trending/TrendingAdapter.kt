@@ -6,6 +6,7 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.gerryjuans.template.R
 import com.gerryjuans.template.api.GithubRepo
@@ -21,6 +22,7 @@ class TrendingAdapter(
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private val elevationHeight = 4 * context.resources.displayMetrics.density;
+    private val avatarPlaceHolder = ContextCompat.getDrawable(context, R.drawable.placeholder_avatar)
     private val numberFormat = NumberFormat.getNumberInstance(Locale.ENGLISH)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
@@ -37,9 +39,7 @@ class TrendingAdapter(
         val item = items[position]
 
         (holder as Holder).let {
-            if (!item.avatar.isNullOrBlank()) {
-                it.avatar.loadImage(item.avatar, R.drawable.placeholder_avatar)
-            }
+            if (!item.avatar.isNullOrBlank()) { it.avatar.loadImage(item.avatar, avatarPlaceHolder) }
             it.author.text = item.author ?: ""
             it.name.text = item.name ?: ""
             it.description.text = item.description ?: ""
@@ -52,6 +52,12 @@ class TrendingAdapter(
                 it.itemView.elevation = if (item.expanded) elevationHeight else 0f
             }
             it.itemView.elevation = if (item.expanded) elevationHeight else 0f
+
+            if (it.content.layoutParams.height != item.measuredHeight) {
+                val param = it.content.layoutParams
+                param.height = item.measuredHeight
+                it.content.layoutParams = param
+            }
         }
     }
 
@@ -60,16 +66,17 @@ class TrendingAdapter(
             animateCollapse(container)
             item.expanded = false
         } else {
-            animateExpand(container, maxWidth)
+            animateExpand(container, maxWidth, item)
             item.expanded = true
         }
     }
 
-    private fun animateExpand(view: View, maxWidth: Int) {
+    private fun animateExpand(view: View, maxWidth: Int, item: GithubRepo) {
         view.measure(
             View.MeasureSpec.makeMeasureSpec(maxWidth, View.MeasureSpec.EXACTLY),
             View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED)
         )
+        item.measuredHeight = view.measuredHeight
         animate(view, 0, view.measuredHeight)
     }
 
