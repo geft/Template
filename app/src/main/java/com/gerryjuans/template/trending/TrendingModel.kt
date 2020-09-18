@@ -10,4 +10,11 @@ class TrendingModel(
     var items: List<GithubRepo> = emptyList(),
     var time: LocalDateTime? = null,
     var scrollPosition: Int = 0
-) : BaseModel()
+) : BaseModel() {
+
+    fun load(data: TrendingModel) {
+        this.items = data.items
+        this.time = data.time
+        this.scrollPosition = data.scrollPosition
+    }
+}

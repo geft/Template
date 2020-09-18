@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.widget.PopupMenu
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.gerryjuans.template.R
 import com.gerryjuans.template.api.GithubRepo
 import com.gerryjuans.template.base.BaseActivity
@@ -67,6 +68,16 @@ class TrendingActivity : BaseActivity<TrendingView, TrendingPresenter, TrendingM
     private fun initRecyclerView() {
         binding.recyclerView.adapter = TrendingAdapter(this, emptyList())
         binding.recyclerView.itemAnimator = null
+        (binding.recyclerView.layoutManager as LinearLayoutManager).let {
+            binding.recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+                override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+                    super.onScrollStateChanged(recyclerView, newState)
+                    if (newState == RecyclerView.SCROLL_STATE_IDLE) {
+                        presenter.updateScrollPosition(it.findFirstVisibleItemPosition())
+                    }
+                }
+            })
+        }
     }
 
     private fun initSwipeRefresh() {

@@ -24,6 +24,7 @@ class TrendingPresenter @Inject constructor(
         if (prevData == null || timeChecker.isDataExpired(prevData.time)) {
             populateFromApi()
         } else {
+            model.load(prevData)
             view?.updateList(prevData.items)
             view?.scrollTo(prevData.scrollPosition)
         }
@@ -56,14 +57,17 @@ class TrendingPresenter @Inject constructor(
     fun saveToBundle(bundle: Bundle, scrollPosition: Int) {
         model.scrollPosition = scrollPosition
         bundle.putParcelable(KEY_MODEL, model)
+        trendingProvider.save(model)
     }
 
     fun restoreFromBundle(bundle: Bundle) {
         bundle.getParcelable<TrendingModel>(KEY_MODEL)?.let {
-            model.items = it.items
-            model.time = it.time
-            model.scrollPosition = it.scrollPosition
+            model.load(it)
         }
+    }
+
+    fun updateScrollPosition(scrollPosition: Int) {
+        model.scrollPosition = scrollPosition
     }
 
     enum class SortType(val getSortedItems: (List<GithubRepo>) -> List<GithubRepo>) {
