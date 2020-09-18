@@ -1,6 +1,5 @@
 package com.gerryjuans.template.trending
 
-import android.os.Bundle
 import android.util.Log
 import com.gerryjuans.template.api.GithubRepo
 import com.gerryjuans.template.base.BasePresenter
@@ -53,14 +52,6 @@ class TrendingPresenter @Inject constructor(
         updateListAndScroll()
     }
 
-    fun saveToBundle(bundle: Bundle) {
-        bundle.putParcelable(KEY_MODEL, model)
-    }
-
-    fun restoreFromBundle(bundle: Bundle) {
-        bundle.getParcelable<TrendingModel>(KEY_MODEL)?.let { model.update(it) }
-    }
-
     fun updateScrollPosition(scrollPosition: Int) {
         model.scrollPosition = scrollPosition
     }
@@ -68,9 +59,5 @@ class TrendingPresenter @Inject constructor(
     enum class SortType(val getSortedItems: (List<GithubRepo>) -> List<GithubRepo>) {
         NAME    ( { items -> items.sortedBy { it.name } } ),
         STARS   ( { items -> items.sortedByDescending { it.stars } } )
-    }
-
-    private companion object {
-        const val KEY_MODEL = "BUNDLE"
     }
 }

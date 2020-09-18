@@ -53,9 +53,15 @@ class TrendingAdapter(
             }
             it.itemView.elevation = if (item.expanded) elevationHeight else 0f
 
-            if (it.content.layoutParams.height != item.measuredHeight) {
-                val param = it.content.layoutParams
-                param.height = item.measuredHeight
+            val param = it.content.layoutParams
+            if (item.expanded) {
+                it.name.post {
+                    measure(it.content, it.name.measuredWidth)
+                    param.height = it.content.measuredHeight
+                    it.content.layoutParams = param
+                }
+            } else {
+                param.height = 0
                 it.content.layoutParams = param
             }
         }
@@ -77,21 +83,24 @@ class TrendingAdapter(
     }
 
     private fun collapseAllExpandedItems() {
-        items
-            .filter { it.expanded }
-            .forEachIndexed { index, item ->
+        items.forEachIndexed { index, item ->
+            if (item.expanded) {
                 item.expanded = false
                 notifyItemChanged(index)
             }
+        }
     }
 
     private fun animateExpand(view: View, maxWidth: Int, item: GithubRepo) {
+        measure(view, maxWidth)
+        animate(view, 0, view.measuredHeight)
+    }
+
+    private fun measure(view: View, maxWidth: Int) {
         view.measure(
             View.MeasureSpec.makeMeasureSpec(maxWidth, View.MeasureSpec.EXACTLY),
             View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED)
         )
-        item.measuredHeight = view.measuredHeight
-        animate(view, 0, view.measuredHeight)
     }
 
     private fun animateCollapse(view: View) {
@@ -127,6 +136,7 @@ class TrendingAdapter(
     fun updateList(items: List<GithubRepo>) {
         this.items = items
         notifyDataSetChanged()
+        items.forEachIndexed { index, item -> if (item.expanded) notifyItemChanged(index) }
     }
 
     private class Holder(

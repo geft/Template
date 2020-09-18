@@ -34,7 +34,6 @@ class TrendingActivity : BaseActivity<TrendingView, TrendingPresenter, TrendingM
         initRecyclerView()
         initSwipeRefresh()
 
-        savedInstanceState?.let { presenter.restoreFromBundle(it) }
         presenter.populate()
     }
 
@@ -100,12 +99,6 @@ class TrendingActivity : BaseActivity<TrendingView, TrendingPresenter, TrendingM
 
     override fun hideError() {
         binding.containerError.visibility = View.GONE
-    }
-
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
-
-        presenter.saveToBundle(outState)
     }
 
     override fun onPause() {
