@@ -9,6 +9,8 @@ interface TrendingView : BaseView {
 
     fun showLoading()
 
+    fun stopLoading()
+
     fun showError()
 
     fun hideError()

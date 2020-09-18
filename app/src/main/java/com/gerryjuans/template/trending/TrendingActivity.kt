@@ -15,7 +15,6 @@ class TrendingActivity : BaseActivity<TrendingView, TrendingPresenter, TrendingM
     lateinit var appComponent: AppComponent
 
     private lateinit var binding: TrendingActivityBinding
-    private val adapter by lazy { TrendingAdapter(this, emptyList()) }
 
     override fun injectComponent() {
         buildComponent().inject(this)
@@ -28,13 +27,8 @@ class TrendingActivity : BaseActivity<TrendingView, TrendingPresenter, TrendingM
     override fun onInitView() {
         binding = TrendingActivityBinding.inflate(LayoutInflater.from(this))
         setContentView(binding.root)
-        initRecyclerView()
         initRetry()
         presenter.populate()
-    }
-
-    private fun initRecyclerView() {
-        binding.recyclerView.adapter = adapter
     }
 
     private fun initRetry() {
@@ -45,11 +39,15 @@ class TrendingActivity : BaseActivity<TrendingView, TrendingPresenter, TrendingM
     }
 
     override fun updateList(items: List<GithubRepo>) {
-        adapter.setItems(items)
+        binding.recyclerView.adapter = TrendingAdapter(items)
     }
 
     override fun showLoading() {
-        (binding.recyclerView.adapter as? TrendingAdapter)?.setLoading()
+        binding.placeholder.show()
+    }
+
+    override fun stopLoading() {
+        binding.placeholder.hide()
     }
 
     override fun showError() {

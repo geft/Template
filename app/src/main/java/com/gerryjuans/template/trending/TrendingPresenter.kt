@@ -21,6 +21,7 @@ class TrendingPresenter @Inject constructor(
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnSubscribe { view?.showLoading() }
+                .doFinally { view?.stopLoading() }
                 .doOnError { view?.showError() }
                 .subscribe({
                     view?.updateList(it)
