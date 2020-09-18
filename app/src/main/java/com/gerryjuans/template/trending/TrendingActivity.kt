@@ -33,6 +33,8 @@ class TrendingActivity : BaseActivity<TrendingView, TrendingPresenter, TrendingM
         initMenu()
         initRetry()
         initRecyclerView()
+        initSwipeRefresh()
+
         presenter.populate()
     }
 
@@ -64,8 +66,16 @@ class TrendingActivity : BaseActivity<TrendingView, TrendingPresenter, TrendingM
         binding.recyclerView.itemAnimator = null
     }
 
+    private fun initSwipeRefresh() {
+        binding.containerSwipe.setOnRefreshListener {
+            binding.containerSwipe.isRefreshing = true
+            presenter.populate()
+        }
+    }
+
     override fun updateList(items: List<GithubRepo>) {
         (binding.recyclerView.adapter as TrendingAdapter).updateList(items)
+        binding.containerSwipe.isRefreshing = false
     }
 
     override fun showLoading() {

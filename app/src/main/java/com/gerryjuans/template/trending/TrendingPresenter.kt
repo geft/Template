@@ -21,12 +21,14 @@ class TrendingPresenter @Inject constructor(
     override fun createViewModel() = TrendingModel()
 
     fun populate() {
-        val prevData = trendingProvider.load()
-        if (prevData == null || timeChecker.isDataExpired(prevData.time)) {
-            populateFromApi()
-        } else {
-            updateList(prevData.items)
-        }
+//        val prevData = trendingProvider.load()
+//        if (prevData == null || timeChecker.isDataExpired(prevData.time)) {
+//            populateFromApi()
+//        } else {
+//            updateList(prevData.items)
+//        }
+
+        populateFromApi()
     }
 
     private fun populateFromApi() {
