@@ -8,4 +8,7 @@ data class GithubRepo(
     val language: String? = "",
     val stars: Int = 0,
     val forks: Int = 0
-)
+) {
+
+    var expanded = false
+}

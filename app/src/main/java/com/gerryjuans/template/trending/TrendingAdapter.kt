@@ -1,12 +1,14 @@
 package com.gerryjuans.template.trending
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.gerryjuans.template.R
 import com.gerryjuans.template.api.GithubRepo
 import com.gerryjuans.template.databinding.TrendingItemBinding
 import com.gerryjuans.template.util.loadImage
+import com.gerryjuans.template.util.setThrottleListener
 import java.text.NumberFormat
 import java.util.*
 
@@ -39,6 +41,18 @@ class TrendingAdapter(
             it.language.text = item.language ?: ""
             it.star.text = numberFormat.format(item.stars)
             it.fork.text = numberFormat.format(item.forks)
+            it.content.visibility = if (item.expanded) View.VISIBLE else View.GONE
+            it.itemView.setThrottleListener {
+                if (item.expanded) {
+                    it.content.visibility = View.GONE
+                    item.expanded = false
+                    notifyItemChanged(position)
+                } else {
+                    it.content.visibility = View.VISIBLE
+                    item.expanded = true
+                    notifyItemChanged(position)
+                }
+            }
         }
     }
 
@@ -53,5 +67,6 @@ class TrendingAdapter(
         val language = itemBinding.textLanguage
         val star = itemBinding.textStar
         val fork = itemBinding.textFork
+        val content = itemBinding.containerContent
     }
 }

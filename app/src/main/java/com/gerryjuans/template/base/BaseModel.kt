@@ -1,3 +1,5 @@
 package com.gerryjuans.template.base
 
-abstract class BaseModel
+import android.os.Parcelable
+
+abstract class BaseModel : Parcelable
