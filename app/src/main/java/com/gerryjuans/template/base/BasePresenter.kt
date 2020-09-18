@@ -6,6 +6,7 @@ abstract class BasePresenter<V: BaseView, M : BaseModel> {
 
     var view: V? = null
 
+    protected val model: M by lazy { createViewModel() }
     protected val compositeDisposable = CompositeDisposable()
 
     protected abstract fun createViewModel(): M

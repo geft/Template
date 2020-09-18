@@ -1,6 +1,7 @@
 package com.gerryjuans.template.trending
 
 import android.util.Log
+import com.gerryjuans.template.api.GithubRepo
 import com.gerryjuans.template.api.GithubRepoProvider
 import com.gerryjuans.template.base.BasePresenter
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
@@ -24,8 +25,19 @@ class TrendingPresenter @Inject constructor(
                 .doFinally { view?.stopLoading() }
                 .doOnError { view?.showError() }
                 .subscribe({
+                    if (it.isNullOrEmpty()) throw IllegalStateException("list is null or empty")
+                    model.items = it
                     view?.updateList(it)
                 }, { Log.e(this.javaClass.name, it.message, it) })
         )
+    }
+
+    fun sortBy(type: SortType) {
+        view?.updateList(type.getSortedItems(model.items))
+    }
+
+    enum class SortType(val getSortedItems: (List<GithubRepo>) -> List<GithubRepo>) {
+        NAME    ( { items -> items.sortedBy { it.name } } ),
+        STARS   ( { items -> items.sortedByDescending { it.stars } } )
     }
 }

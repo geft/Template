@@ -20,7 +20,7 @@ class TrendingAdapter(
     private var items: List<GithubRepo>
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
-    private val elevationHeight = 8 * context.resources.displayMetrics.density;
+    private val elevationHeight = 4 * context.resources.displayMetrics.density;
     private val numberFormat = NumberFormat.getNumberInstance(Locale.ENGLISH)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {

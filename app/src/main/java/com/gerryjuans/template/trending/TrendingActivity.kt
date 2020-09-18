@@ -2,11 +2,14 @@ package com.gerryjuans.template.trending
 
 import android.view.LayoutInflater
 import android.view.View
+import android.widget.PopupMenu
+import com.gerryjuans.template.R
 import com.gerryjuans.template.api.GithubRepo
 import com.gerryjuans.template.base.BaseActivity
 import com.gerryjuans.template.databinding.TrendingActivityBinding
 import com.gerryjuans.template.di.AppComponent
 import com.gerryjuans.template.di.buildComponent
+import com.gerryjuans.template.util.setThrottleListener
 import javax.inject.Inject
 
 class TrendingActivity : BaseActivity<TrendingView, TrendingPresenter, TrendingModel>(), TrendingView {
@@ -27,8 +30,25 @@ class TrendingActivity : BaseActivity<TrendingView, TrendingPresenter, TrendingM
     override fun onInitView() {
         binding = TrendingActivityBinding.inflate(LayoutInflater.from(this))
         setContentView(binding.root)
+        initMenu()
         initRetry()
         presenter.populate()
+    }
+
+    private fun initMenu() {
+        binding.imageMenu.setThrottleListener {
+            PopupMenu(this, binding.imageMenu).apply {
+                menuInflater.inflate(R.menu.trending, this.menu)
+                setOnMenuItemClickListener {
+                    when (it.itemId) {
+                        R.id.sort_stars -> presenter.sortBy(TrendingPresenter.SortType.STARS)
+                        R.id.sort_name -> presenter.sortBy(TrendingPresenter.SortType.NAME)
+                    }
+                    false
+                }
+            }
+                .show()
+        }
     }
 
     private fun initRetry() {
