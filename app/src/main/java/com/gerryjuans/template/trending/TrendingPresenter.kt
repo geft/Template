@@ -1,7 +1,6 @@
 package com.gerryjuans.template.trending
 
 import android.util.Log
-import com.gerryjuans.template.api.GithubRepo
 import com.gerryjuans.template.base.BasePresenter
 import com.gerryjuans.template.trending.usecase.TrendingLoader
 import com.gerryjuans.template.trending.usecase.TrendingPopulator
@@ -45,17 +44,12 @@ class TrendingPresenter @Inject constructor(
         )
     }
 
-    fun sortBy(type: SortType) {
+    fun sortBy(type: TrendingSortType) {
         model.refreshFromSort(type.getSortedItems(model.items))
         updateListAndScroll()
     }
 
     fun updateScrollPosition(scrollPosition: Int) {
         model.scrollPosition = scrollPosition
-    }
-
-    enum class SortType(val getSortedItems: (List<GithubRepo>) -> List<GithubRepo>) {
-        NAME    ( { items -> items.sortedBy { it.name } } ),
-        STARS   ( { items -> items.sortedByDescending { it.stars } } )
     }
 }

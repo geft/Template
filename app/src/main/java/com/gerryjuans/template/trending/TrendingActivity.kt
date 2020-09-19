@@ -43,8 +43,8 @@ class TrendingActivity : BaseActivity<TrendingView, TrendingPresenter, TrendingM
                 menuInflater.inflate(R.menu.trending, this.menu)
                 setOnMenuItemClickListener {
                     when (it.itemId) {
-                        R.id.sort_stars -> presenter.sortBy(TrendingPresenter.SortType.STARS)
-                        R.id.sort_name -> presenter.sortBy(TrendingPresenter.SortType.NAME)
+                        R.id.sort_stars -> presenter.sortBy(TrendingSortType.STARS)
+                        R.id.sort_name -> presenter.sortBy(TrendingSortType.NAME)
                     }
                     false
                 }
