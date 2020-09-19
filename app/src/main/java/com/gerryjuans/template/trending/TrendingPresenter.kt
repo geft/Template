@@ -5,6 +5,7 @@ import com.gerryjuans.template.api.GithubRepo
 import com.gerryjuans.template.base.BasePresenter
 import com.gerryjuans.template.trending.usecase.TrendingLoader
 import com.gerryjuans.template.trending.usecase.TrendingPopulator
+import org.threeten.bp.LocalDateTime
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -20,7 +21,7 @@ class TrendingPresenter @Inject constructor(
     override fun createViewModel() = TrendingModel()
 
     fun populate() {
-        trendingLoader.load(this)
+        trendingLoader.load(this, LocalDateTime.now())
     }
 
     override fun updateModel(data: TrendingModel) {
