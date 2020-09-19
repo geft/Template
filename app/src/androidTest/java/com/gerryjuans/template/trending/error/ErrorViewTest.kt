@@ -35,4 +35,21 @@ class ErrorViewTest {
         )
             .check(matches(not(isDisplayed())))
     }
+
+    @Test
+    fun shouldHaveErrorDescription() {
+        onView(
+            allOf(
+                withText(R.string.error_description),
+                withId(R.id.text_description)
+            )
+        )
+            .check(matches(not(isDisplayed())))
+    }
+
+    @Test
+    fun shouldHaveButton() {
+        onView(withText(R.string.error_cta))
+            .check(matches(not(isDisplayed())))
+    }
 }
