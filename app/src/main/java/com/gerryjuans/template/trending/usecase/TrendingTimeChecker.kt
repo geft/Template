@@ -9,7 +9,7 @@ class TrendingTimeChecker @Inject constructor() {
     fun isDataExpired(prevTime: LocalDateTime?, currentTime: LocalDateTime): Boolean {
         if (prevTime == null) return true
 
-        val durationInHours = Duration.between(currentTime, prevTime).toHours()
-        return durationInHours > TrendingConstants.REFRESH_THRESHOLD_IN_HOURS
+        val durationInMinutes = Duration.between(currentTime, prevTime).toMinutes()
+        return durationInMinutes > TrendingConstants.REFRESH_THRESHOLD_IN_MINUTES
     }
 }
