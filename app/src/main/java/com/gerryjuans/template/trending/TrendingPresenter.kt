@@ -35,16 +35,13 @@ class TrendingPresenter @Inject constructor(
 
     override fun populateFromApi() {
         compositeDisposable.add(
-            trendingPopulator.getPopulateDisposable(
-                view = view,
-                onSuccess = {
+            trendingPopulator.getPopulateSingle(view)
+                .subscribe({
                     model.refreshFromApi(it)
                     trendingProvider.save(model)
                     updateListAndScroll()
                     isLoaded = true
-                },
-                onError = { Log.e(this.javaClass.name, it.message, it) }
-            )
+                }, { Log.e(this.javaClass.name, it.message, it) })
         )
     }
 
