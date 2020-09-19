@@ -106,11 +106,12 @@ class TrendingActivity : BaseActivity<TrendingView, TrendingPresenter, TrendingM
         binding.containerError.visibility = View.GONE
     }
 
-    override fun onPause() {
-        super.onPause()
+    override fun onStop() {
+        super.onStop()
 
         val scrollPosition = (binding.recyclerView.layoutManager as LinearLayoutManager)
             .findFirstVisibleItemPosition()
         presenter.updateScrollPosition(scrollPosition)
+        presenter.saveState()
     }
 }

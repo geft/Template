@@ -53,4 +53,8 @@ class TrendingPresenter @Inject constructor(
     fun updateScrollPosition(scrollPosition: Int) {
         model.scrollPosition = scrollPosition
     }
+
+    fun saveState() {
+        sharedPrefHelper.save(model)
+    }
 }

@@ -92,7 +92,6 @@ class TrendingListAdapter(
     fun updateList(items: List<GithubRepo>) {
         this.items = items
         notifyDataSetChanged()
-        items.forEachIndexed { index, item -> if (item.expanded) notifyItemChanged(index) }
     }
 
     private class Holder(
