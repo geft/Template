@@ -51,17 +51,21 @@ class TrendingListAdapter(
             }
             it.itemView.elevation = if (item.expanded) elevationHeight else 0f
 
-            val param = it.content.layoutParams
-            if (item.expanded) {
-                it.name.post {
-                    animHelper.measure(it.content, it.name.measuredWidth)
-                    param.height = it.content.measuredHeight
-                    it.content.layoutParams = param
-                }
-            } else {
-                param.height = 0
-                it.content.layoutParams = param
+            adjustHeight(it, item)
+        }
+    }
+
+    private fun adjustHeight(holder: Holder, item: GithubRepo) {
+        val param = holder.content.layoutParams
+        if (item.expanded) {
+            holder.name.post {
+                animHelper.measure(holder.content, holder.name.measuredWidth)
+                param.height = holder.content.measuredHeight
+                holder.content.layoutParams = param
             }
+        } else {
+            param.height = 0
+            holder.content.layoutParams = param
         }
     }
 
