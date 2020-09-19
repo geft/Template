@@ -17,6 +17,8 @@ import com.gerryjuans.template.util.setThrottleListener
 class TrendingActivity : BaseActivity<TrendingView, TrendingPresenter>(), TrendingView {
 
     private lateinit var binding: TrendingActivityBinding
+    private val layoutManager = LinearLayoutManager(this)
+    private lateinit var listAdapter: TrendingListAdapter
 
     override fun injectComponent() {
         buildComponent(this).inject(this)
@@ -30,6 +32,9 @@ class TrendingActivity : BaseActivity<TrendingView, TrendingPresenter>(), Trendi
     override fun onInitView(savedInstanceState: Bundle?) {
         binding = TrendingActivityBinding.inflate(LayoutInflater.from(this))
         setContentView(binding.root)
+
+        listAdapter = TrendingListAdapter(this, emptyList())
+
         initMenu()
         initRetry()
         initRecyclerView()
@@ -62,11 +67,8 @@ class TrendingActivity : BaseActivity<TrendingView, TrendingPresenter>(), Trendi
     }
 
     private fun initRecyclerView() {
-        binding.recyclerView.adapter =
-            TrendingListAdapter(
-                this,
-                emptyList()
-            )
+        binding.recyclerView.layoutManager = layoutManager
+        binding.recyclerView.adapter = listAdapter
         binding.recyclerView.itemAnimator = null
     }
 
@@ -78,16 +80,12 @@ class TrendingActivity : BaseActivity<TrendingView, TrendingPresenter>(), Trendi
     }
 
     override fun updateList(items: List<GithubRepo>) {
-        (binding.recyclerView.adapter as TrendingListAdapter).updateList(items)
+        listAdapter.updateList(items)
         binding.containerSwipe.isRefreshing = false
     }
 
     override fun scrollTo(position: Int) {
-        binding.recyclerView.let {
-            if ((position < (it.adapter as TrendingListAdapter).itemCount)) {
-                (it.layoutManager as LinearLayoutManager).scrollToPosition(position)
-            }
-        }
+        layoutManager.scrollToPosition(position)
     }
 
     override fun showLoading() {
@@ -109,8 +107,7 @@ class TrendingActivity : BaseActivity<TrendingView, TrendingPresenter>(), Trendi
     override fun onStop() {
         super.onStop()
 
-        val scrollPosition = (binding.recyclerView.layoutManager as LinearLayoutManager)
-            .findFirstVisibleItemPosition()
+        val scrollPosition = layoutManager.findFirstVisibleItemPosition()
         presenter.updateScrollPosition(scrollPosition)
         presenter.saveState()
     }
