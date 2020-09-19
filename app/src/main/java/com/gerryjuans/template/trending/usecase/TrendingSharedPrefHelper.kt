@@ -1,10 +1,11 @@
-package com.gerryjuans.template.trending
+package com.gerryjuans.template.trending.usecase
 
 import android.content.SharedPreferences
+import com.gerryjuans.template.trending.TrendingModel
 import com.google.gson.Gson
 import javax.inject.Inject
 
-class TrendingProvider @Inject constructor(
+class TrendingSharedPrefHelper @Inject constructor(
     private val gson: Gson,
     private val sharedPreferences: SharedPreferences
 ) {

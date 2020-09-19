@@ -4,15 +4,16 @@ import android.util.Log
 import com.gerryjuans.template.base.BasePresenter
 import com.gerryjuans.template.trending.usecase.TrendingLoader
 import com.gerryjuans.template.trending.usecase.TrendingPopulator
+import com.gerryjuans.template.trending.usecase.TrendingSharedPrefHelper
 import org.threeten.bp.LocalDateTime
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
 class TrendingPresenter @Inject constructor(
-    private val trendingProvider: TrendingProvider,
-    private val trendingPopulator: TrendingPopulator,
-    private val trendingLoader: TrendingLoader
+    private val sharedPrefHelper: TrendingSharedPrefHelper,
+    private val populator: TrendingPopulator,
+    private val loader: TrendingLoader
 ) : BasePresenter<TrendingView, TrendingModel>(), TrendingLoader.Callback {
 
     override var isLoaded = false
@@ -20,7 +21,7 @@ class TrendingPresenter @Inject constructor(
     override fun createViewModel() = TrendingModel()
 
     fun populate() {
-        trendingLoader.load(this, LocalDateTime.now())
+        loader.load(this, LocalDateTime.now())
     }
 
     override fun updateModel(data: TrendingModel) {
@@ -34,10 +35,10 @@ class TrendingPresenter @Inject constructor(
 
     override fun populateFromApi() {
         compositeDisposable.add(
-            trendingPopulator.getPopulateSingle(view)
+            populator.getPopulateSingle(view)
                 .subscribe({
                     model.refreshFromApi(it)
-                    trendingProvider.save(model)
+                    sharedPrefHelper.save(model)
                     updateListAndScroll()
                     isLoaded = true
                 }, { Log.e(this.javaClass.name, it.message, it) })

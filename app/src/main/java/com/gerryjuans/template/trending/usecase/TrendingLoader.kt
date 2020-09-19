@@ -1,12 +1,11 @@
 package com.gerryjuans.template.trending.usecase
 
 import com.gerryjuans.template.trending.TrendingModel
-import com.gerryjuans.template.trending.TrendingProvider
 import org.threeten.bp.LocalDateTime
 import javax.inject.Inject
 
 class TrendingLoader @Inject constructor(
-    private val trendingProvider: TrendingProvider,
+    private val sharedPrefHelper: TrendingSharedPrefHelper,
     private val timeChecker: TrendingTimeChecker
 ) {
 
@@ -14,7 +13,7 @@ class TrendingLoader @Inject constructor(
         if (callback.isLoaded) {
             callback.updateListAndScroll()
         } else {
-            val prevData = trendingProvider.load()
+            val prevData = sharedPrefHelper.load()
             if (prevData == null || timeChecker.isDataExpired(prevData.time, currentTime)) {
                 callback.populateFromApi()
             } else {
