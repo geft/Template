@@ -3,7 +3,7 @@ package com.gerryjuans.template.base
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 
-abstract class BaseActivity<V: BaseView, P : BasePresenter<V, M>, M : BaseModel> : AppCompatActivity() {
+abstract class BaseActivity<V: BaseView, P : BasePresenter<V>> : AppCompatActivity() {
 
     protected lateinit var presenter: P
 
@@ -13,13 +13,13 @@ abstract class BaseActivity<V: BaseView, P : BasePresenter<V, M>, M : BaseModel>
         injectComponent()
 
         presenter = createPresenter()
-        presenter.setActivityView(getActivityView())
+        presenter.view = getActivityView()
 
         onInitView(savedInstanceState)
     }
 
     override fun onDestroy() {
-        presenter.clearActivityView()
+        presenter.view = null
         presenter.dispose()
 
         super.onDestroy()

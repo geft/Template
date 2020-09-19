@@ -11,14 +11,13 @@ import javax.inject.Singleton
 
 @Singleton
 class TrendingPresenter @Inject constructor(
+    private val model: TrendingModel,
     private val sharedPrefHelper: TrendingSharedPrefHelper,
     private val populator: TrendingPopulator,
     private val loader: TrendingLoader
-) : BasePresenter<TrendingView, TrendingModel>(), TrendingLoader.Callback {
+) : BasePresenter<TrendingView>(), TrendingLoader.Callback {
 
     override var isLoaded = false
-
-    override fun createViewModel() = TrendingModel()
 
     fun populate() {
         loader.load(this, LocalDateTime.now())

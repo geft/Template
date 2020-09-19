@@ -3,11 +3,8 @@ package com.gerryjuans.template.trending
 import com.gerryjuans.template.trending.usecase.TrendingLoader
 import com.gerryjuans.template.trending.usecase.TrendingPopulator
 import com.gerryjuans.template.trending.usecase.TrendingSharedPrefHelper
-import io.mockk.MockKAnnotations
-import io.mockk.every
+import io.mockk.*
 import io.mockk.impl.annotations.MockK
-import io.mockk.verifyOrder
-import io.mockk.verifySequence
 import io.reactivex.rxjava3.core.Single
 import org.junit.Assert.assertFalse
 import org.junit.Before
@@ -27,12 +24,15 @@ class TrendingPresenterTest {
     @MockK
     lateinit var view: TrendingView
 
+    @MockK
+    lateinit var model: TrendingModel
+
     private lateinit var presenter: TrendingPresenter
 
     @Before
     fun setUp() {
         MockKAnnotations.init(this, relaxed = true)
-        presenter = TrendingPresenter(sharedPrefHelper, populator, loader)
+        presenter = TrendingPresenter(model, sharedPrefHelper, populator, loader)
         presenter.view = view
     }
 
@@ -45,6 +45,13 @@ class TrendingPresenterTest {
     fun `populate calls loader`() {
         presenter.populate()
         verifySequence { loader.load(any(), any()) }
+    }
+
+    @Test
+    fun `updateModel updates model`() {
+        val data = mockk<TrendingModel>()
+        presenter.updateModel(data)
+        verifySequence { model.update(data) }
     }
 
     @Test
@@ -61,6 +68,7 @@ class TrendingPresenterTest {
         every { populator.getPopulateSingle(view) } returns Single.just(emptyList())
         presenter.populateFromApi()
         verifySequence {
+            model.refreshFromApi(emptyList())
             sharedPrefHelper.save(any())
             presenter.updateListAndScroll()
             presenter.isLoaded = true
@@ -70,6 +78,22 @@ class TrendingPresenterTest {
     @Test
     fun `sortBy calls updateListAndScroll`() {
         presenter.sortBy(TrendingSortType.NAME)
-        verifySequence { presenter.updateListAndScroll() }
+        verify {
+            model.refreshFromSort(any())
+            presenter.updateListAndScroll()
+        }
+    }
+
+    @Test
+    fun updateScrollPosition() {
+        val position = 999
+        presenter.updateScrollPosition(position)
+        verifySequence { model.scrollPosition = position }
+    }
+
+    @Test
+    fun `saveState saves via sharedPrefHelper`() {
+        presenter.saveState()
+        verifySequence { sharedPrefHelper.save(any()) }
     }
 }

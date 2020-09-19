@@ -1,4 +1,3 @@
 package com.gerryjuans.template.base
 
-interface BaseView {
-}
+interface BaseView

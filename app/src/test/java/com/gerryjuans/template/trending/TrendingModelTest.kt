@@ -6,6 +6,7 @@ import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Test
 import org.threeten.bp.LocalDateTime
+import org.threeten.bp.temporal.ChronoUnit
 
 class TrendingModelTest {
 
@@ -68,7 +69,10 @@ class TrendingModelTest {
     @Test
     fun `refresh from api should change time to current`() {
         model.refreshFromApi(emptyList())
-        assertEquals(LocalDateTime.now(), model.time)
+        assertEquals(
+            LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES),
+            model.time!!.truncatedTo(ChronoUnit.MINUTES)
+        )
     }
 
     @Test

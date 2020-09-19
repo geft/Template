@@ -14,7 +14,7 @@ import com.gerryjuans.template.di.buildComponent
 import com.gerryjuans.template.trending.list.TrendingListAdapter
 import com.gerryjuans.template.util.setThrottleListener
 
-class TrendingActivity : BaseActivity<TrendingView, TrendingPresenter, TrendingModel>(), TrendingView {
+class TrendingActivity : BaseActivity<TrendingView, TrendingPresenter>(), TrendingView {
 
     private lateinit var binding: TrendingActivityBinding
 
