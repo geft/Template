@@ -11,6 +11,7 @@ import com.gerryjuans.template.base.BaseActivity
 import com.gerryjuans.template.base.BaseApplication
 import com.gerryjuans.template.databinding.TrendingActivityBinding
 import com.gerryjuans.template.di.buildComponent
+import com.gerryjuans.template.trending.list.TrendingListAdapter
 import com.gerryjuans.template.util.setThrottleListener
 
 class TrendingActivity : BaseActivity<TrendingView, TrendingPresenter, TrendingModel>(), TrendingView {
@@ -61,7 +62,11 @@ class TrendingActivity : BaseActivity<TrendingView, TrendingPresenter, TrendingM
     }
 
     private fun initRecyclerView() {
-        binding.recyclerView.adapter = TrendingAdapter(this, emptyList())
+        binding.recyclerView.adapter =
+            TrendingListAdapter(
+                this,
+                emptyList()
+            )
         binding.recyclerView.itemAnimator = null
     }
 
@@ -73,13 +78,13 @@ class TrendingActivity : BaseActivity<TrendingView, TrendingPresenter, TrendingM
     }
 
     override fun updateList(items: List<GithubRepo>) {
-        (binding.recyclerView.adapter as TrendingAdapter).updateList(items)
+        (binding.recyclerView.adapter as TrendingListAdapter).updateList(items)
         binding.containerSwipe.isRefreshing = false
     }
 
     override fun scrollTo(position: Int) {
         binding.recyclerView.let {
-            if ((position < (it.adapter as TrendingAdapter).itemCount)) {
+            if ((position < (it.adapter as TrendingListAdapter).itemCount)) {
                 (it.layoutManager as LinearLayoutManager).scrollToPosition(position)
             }
         }
