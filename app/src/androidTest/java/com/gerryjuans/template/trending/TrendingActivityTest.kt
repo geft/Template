@@ -2,12 +2,12 @@ package com.gerryjuans.template.trending
 
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions
-import androidx.test.espresso.assertion.ViewAssertions
-import androidx.test.espresso.matcher.ViewMatchers
+import androidx.test.espresso.assertion.ViewAssertions.matches
+import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.gerryjuans.template.R
-import org.hamcrest.Matchers
+import org.hamcrest.Matchers.not
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -20,34 +20,34 @@ class TrendingActivityTest {
 
     @Test
     fun titleShouldBeTrending() {
-        onView(ViewMatchers.withText("Trending"))
-            .check(ViewAssertions.matches(ViewMatchers.isDisplayed()))
+        onView(withText(R.string.trending_title))
+            .check(matches(isDisplayed()))
     }
 
     @Test
     fun menuButtonShouldExist() {
-        onView(ViewMatchers.withId(R.id.image_menu))
-            .check(ViewAssertions.matches(ViewMatchers.isDisplayed()))
+        onView(withId(R.id.image_menu))
+            .check(matches(isDisplayed()))
     }
 
     @Test
     fun clickingMenuButtonShouldShowSortMenu() {
-        onView(ViewMatchers.withId(R.id.image_menu)).perform(ViewActions.click())
-        onView(ViewMatchers.withText("Sort by stars"))
-            .check(ViewAssertions.matches(ViewMatchers.isDisplayed()))
-        onView(ViewMatchers.withText("Sort by name"))
-            .check(ViewAssertions.matches(ViewMatchers.isDisplayed()))
+        onView(withId(R.id.image_menu)).perform(ViewActions.click())
+        onView(withText(R.string.sort_stars))
+            .check(matches(isDisplayed()))
+        onView(withText(R.string.sort_name))
+            .check(matches(isDisplayed()))
     }
 
     @Test
     fun errorContainerShouldNotShow() {
-        onView(ViewMatchers.withId(R.id.container_error))
-            .check(ViewAssertions.matches(Matchers.not(ViewMatchers.isDisplayed())))
+        onView(withId(R.id.container_error))
+            .check(matches(not(isDisplayed())))
     }
 
     @Test
     fun placeholderContainerShouldNotShow() {
-        onView(ViewMatchers.withId(R.id.placeholder))
-            .check(ViewAssertions.matches(Matchers.not(ViewMatchers.isDisplayed())))
+        onView(withId(R.id.placeholder))
+            .check(matches(not(isDisplayed())))
     }
 }
