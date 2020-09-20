@@ -46,7 +46,7 @@ class RecyclerViewMatcher(private val recyclerViewId: Int) {
                     val recyclerView = view.rootView
                         .findViewById<View>(recyclerViewId) as RecyclerView
                     childView = if (recyclerView.id == recyclerViewId) {
-                        recyclerView.findViewHolderForAdapterPosition(position)!!.itemView
+                        recyclerView.findViewHolderForAdapterPosition(position)?.itemView
                     } else {
                         return false
                     }

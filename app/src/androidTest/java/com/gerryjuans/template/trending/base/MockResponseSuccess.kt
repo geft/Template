@@ -1,6 +1,10 @@
 package com.gerryjuans.template.trending.base
 
 object MockResponseSuccess {
+
+    const val FIRST_NAME = "AAAAAAAA"
+    const val MOST_STARS = 99999999
+
     const val get = "[\n" +
             "  {\n" +
             "    \"author\": \"author\",\n" +
@@ -240,7 +244,7 @@ object MockResponseSuccess {
             "    \"forks\": 125,\n" +
             "    \"language\": \"C#\",\n" +
             "    \"name\": \"windows\",\n" +
-            "    \"stars\": 329\n" +
+            "    \"stars\": $MOST_STARS\n" +
             "  },\n" +
             "  {\n" +
             "    \"author\": \"snakers4\",\n" +
@@ -249,7 +253,7 @@ object MockResponseSuccess {
             "    \"expanded\": false,\n" +
             "    \"forks\": 10,\n" +
             "    \"language\": \"Jupyter Notebook\",\n" +
-            "    \"name\": \"silero-models\",\n" +
+            "    \"name\": \"$FIRST_NAME\",\n" +
             "    \"stars\": 137\n" +
             "  }\n" +
             "]"

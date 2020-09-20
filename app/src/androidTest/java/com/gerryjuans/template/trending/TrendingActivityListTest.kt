@@ -1,51 +1,28 @@
 package com.gerryjuans.template.trending
 
-import android.content.Context
 import android.content.pm.ActivityInfo
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.assertion.ViewAssertions.matches
-import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
-import androidx.test.espresso.matcher.ViewMatchers.withText
+import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import androidx.test.platform.app.InstrumentationRegistry
-import androidx.test.rule.ActivityTestRule
 import com.gerryjuans.template.R
-import com.gerryjuans.template.di.ProviderModule
+import com.gerryjuans.template.trending.base.BaseTrendingTest
+import com.gerryjuans.template.trending.base.MockResponseSuccess
 import com.gerryjuans.template.trending.base.SuccessDispatcher
 import com.gerryjuans.template.trending.base.TestUtils.withRecyclerView
 import com.squareup.okhttp.mockwebserver.MockWebServer
 import org.hamcrest.Matchers.not
-import org.junit.After
-import org.junit.Before
-import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
+import java.text.NumberFormat
+import java.util.*
 
 @RunWith(AndroidJUnit4::class)
-class TrendingActivityListTest {
+class TrendingActivityListTest : BaseTrendingTest() {
 
-    @get:Rule
-    val activityRule = ActivityTestRule(TrendingActivity::class.java, true, false)
-    private val mockWebServer = MockWebServer()
-
-    @Before
-    fun setup() {
-        mockWebServer.play(8080)
+    override fun setResponses(mockWebServer: MockWebServer) {
         mockWebServer.setDispatcher(SuccessDispatcher())
-        clearSharedPref()
-        activityRule.launchActivity(null)
-    }
-
-    private fun clearSharedPref() {
-        InstrumentationRegistry.getInstrumentation().targetContext
-            .getSharedPreferences(ProviderModule.SHARED_PREF_KEY, Context.MODE_PRIVATE)
-            .edit().clear().commit()
-    }
-
-    @After
-    fun teardown() {
-        mockWebServer.shutdown()
     }
 
     private fun assertCollapsibleItems(position: Int, displayed: Boolean) {
@@ -108,5 +85,21 @@ class TrendingActivityListTest {
         assertCollapsibleItems(1, true)
         activityRule.activity.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
         assertCollapsibleItems(1, true)
+    }
+
+    @Test
+    fun firstItemAfterSortingByNameShouldHaveFirstName() {
+        onView(withId(R.id.image_menu)).perform(click())
+        onView(withText(R.string.sort_name)).perform(click())
+        onView(withRecyclerView(R.id.recycler_view).atPositionOnView(0, R.id.text_name))
+            .check(matches(withText(MockResponseSuccess.FIRST_NAME)))
+    }
+
+    @Test
+    fun firstItemAfterSortingByStarsShouldHaveMostStars() {
+        onView(withId(R.id.image_menu)).perform(click())
+        onView(withText(R.string.sort_stars)).perform(click())
+        onView(withRecyclerView(R.id.recycler_view).atPositionOnView(0, R.id.text_star))
+            .check(matches(withText(NumberFormat.getInstance(Locale.ENGLISH).format(MockResponseSuccess.MOST_STARS))))
     }
 }
