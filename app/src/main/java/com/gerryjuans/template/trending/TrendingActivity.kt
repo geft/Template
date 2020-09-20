@@ -91,9 +91,9 @@ class TrendingActivity : BaseActivity<TrendingView, TrendingPresenter>(), Trendi
     }
 
     override fun scrollTo(position: Int) {
-        binding.recyclerView.postDelayed({
+        binding.recyclerView.post {
             layoutManager.scrollToPositionWithOffset(position, 0)
-        }, 100)
+        }
     }
 
     override fun showLoading() {
