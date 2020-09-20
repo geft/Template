@@ -4,9 +4,7 @@ import com.gerryjuans.template.api.GithubRepo
 import com.gerryjuans.template.util.TimeProvider
 import org.threeten.bp.LocalDateTime
 import javax.inject.Inject
-import javax.inject.Singleton
 
-@Singleton
 class TrendingModel @Inject constructor() {
 
     var items: List<GithubRepo> = emptyList()
