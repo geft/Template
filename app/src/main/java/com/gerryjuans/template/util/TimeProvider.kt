@@ -5,5 +5,5 @@ import javax.inject.Inject
 
 class TimeProvider @Inject constructor() {
 
-    fun getCurrentTime() = LocalDateTime.now()
+    fun getCurrentTime(): LocalDateTime = LocalDateTime.now()
 }
