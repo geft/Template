@@ -13,7 +13,7 @@ class ProviderModule(
     private val context: Context
 ) {
 
-    private companion object {
+    companion object {
         const val SHARED_PREF_KEY = "SHARED_PREF_KEY"
     }
 

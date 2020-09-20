@@ -15,7 +15,7 @@ android {
         versionName "1.0"
         multiDexEnabled true
 
-        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner "com.gerryjuans.template.trending.base.MockRunner"
     }
 
     compileOptions {

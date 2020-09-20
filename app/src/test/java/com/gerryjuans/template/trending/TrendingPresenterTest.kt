@@ -7,7 +7,6 @@ import com.gerryjuans.template.util.TimeProvider
 import io.mockk.*
 import io.mockk.impl.annotations.MockK
 import io.reactivex.rxjava3.core.Single
-import org.junit.Assert.assertFalse
 import org.junit.Before
 import org.junit.Test
 
@@ -41,11 +40,6 @@ class TrendingPresenterTest {
     }
 
     @Test
-    fun `isLoaded is false by default`() {
-        assertFalse(presenter.isLoaded)
-    }
-
-    @Test
     fun `populate calls loader`() {
         presenter.populate()
         verifySequence { loader.load(any(), any()) }
@@ -68,14 +62,13 @@ class TrendingPresenterTest {
     }
 
     @Test
-    fun `populator success will save locally, calls updateListAndScroll, and set isLoaded true`() {
+    fun `populator success will save locally and call updateListAndScroll`() {
         every { populator.getPopulateSingle(view) } returns Single.just(emptyList())
         presenter.populateFromApi()
         verifySequence {
             model.refreshFromApi(emptyList(), timeProvider)
             sharedPrefHelper.save(any())
             presenter.updateListAndScroll()
-            presenter.isLoaded = true
         }
     }
 

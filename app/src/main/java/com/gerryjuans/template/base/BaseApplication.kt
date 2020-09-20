@@ -8,7 +8,11 @@ import com.gerryjuans.template.di.ProviderModule
 import com.google.android.gms.security.ProviderInstaller
 import com.jakewharton.threetenabp.AndroidThreeTen
 
-class BaseApplication : MultiDexApplication() {
+open class BaseApplication : MultiDexApplication() {
+
+    private companion object {
+        const val BASE_URL = "https://ghapi.huchen.dev/"
+    }
 
     lateinit var appComponent: AppComponent
 
@@ -45,4 +49,6 @@ class BaseApplication : MultiDexApplication() {
             .providerModule(ProviderModule(this))
             .build()
     }
+
+    open fun getBaseUrl() = BASE_URL
 }

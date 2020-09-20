@@ -8,7 +8,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.gerryjuans.template.R
 import com.gerryjuans.template.api.GithubRepo
 import com.gerryjuans.template.base.BaseActivity
-import com.gerryjuans.template.base.BaseApplication
 import com.gerryjuans.template.databinding.TrendingActivityBinding
 import com.gerryjuans.template.di.buildComponent
 import com.gerryjuans.template.trending.list.TrendingListAdapter
@@ -23,9 +22,6 @@ class TrendingActivity : BaseActivity<TrendingView, TrendingPresenter>(), Trendi
     override fun injectComponent() {
         buildComponent(this).inject(this)
     }
-
-    override fun createPresenter() =
-        (applicationContext as BaseApplication).appComponent.createTrendingPresenter()
 
     override fun getActivityView() = this
 

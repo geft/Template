@@ -11,8 +11,8 @@ import retrofit2.converter.gson.GsonConverterFactory
 abstract class BaseApiProvider<R> {
 
     // create service after obtaining the request interface and then execute
-    fun createRequestInterface(): Retrofit = Retrofit.Builder()
-        .baseUrl(getBaseUrl())
+    fun createRequestInterface(baseUrl: String): Retrofit = Retrofit.Builder()
+        .baseUrl(baseUrl)
         .addConverterFactory(GsonConverterFactory.create())
         .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
         .build()
@@ -32,6 +32,4 @@ abstract class BaseApiProvider<R> {
             }
         }
     }
-
-    protected abstract fun getBaseUrl(): String
 }

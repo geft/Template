@@ -8,9 +8,7 @@ import com.gerryjuans.template.trending.usecase.TrendingSharedPrefHelper
 import com.gerryjuans.template.util.TimeProvider
 import org.threeten.bp.LocalDateTime
 import javax.inject.Inject
-import javax.inject.Singleton
 
-@Singleton
 class TrendingPresenter @Inject constructor(
     private val model: TrendingModel,
     private val sharedPrefHelper: TrendingSharedPrefHelper,
@@ -18,8 +16,6 @@ class TrendingPresenter @Inject constructor(
     private val loader: TrendingLoader,
     private val timeProvider: TimeProvider
 ) : BasePresenter<TrendingView>(), TrendingLoader.Callback {
-
-    override var isLoaded = false
 
     fun populate() {
         loader.load(this, LocalDateTime.now())
@@ -41,7 +37,6 @@ class TrendingPresenter @Inject constructor(
                     model.refreshFromApi(it, timeProvider)
                     sharedPrefHelper.save(model)
                     updateListAndScroll()
-                    isLoaded = true
                 }, { Log.e(this.javaClass.name, it.message, it) })
         )
     }

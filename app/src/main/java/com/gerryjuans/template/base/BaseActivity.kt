@@ -2,17 +2,18 @@ package com.gerryjuans.template.base
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import javax.inject.Inject
 
 abstract class BaseActivity<V: BaseView, P : BasePresenter<V>> : AppCompatActivity() {
 
-    protected lateinit var presenter: P
+    @Inject
+    lateinit var presenter: P
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         injectComponent()
 
-        presenter = createPresenter()
         presenter.view = getActivityView()
 
         onInitView(savedInstanceState)
@@ -24,8 +25,6 @@ abstract class BaseActivity<V: BaseView, P : BasePresenter<V>> : AppCompatActivi
 
         super.onDestroy()
     }
-
-    protected abstract fun createPresenter(): P
 
     protected abstract fun injectComponent()
 

@@ -37,35 +37,21 @@ class TrendingLoaderTest {
         TrendingLoader(sharedPrefHelper, timeChecker).load(callback, currentTime)
 
     @Test
-    fun `if is loaded then update list only`() {
-        every { callback.isLoaded } returns true
-        run()
-        verifySequence {
-            callback.isLoaded
-            callback.updateListAndScroll()
-        }
-    }
-
-    @Test
-    fun `if not loaded and prev data null should call api`() {
-        every { callback.isLoaded } returns false
+    fun `prev data null should call api`() {
         every { sharedPrefHelper.load() } returns null
         run()
         verifySequence {
-            callback.isLoaded
             sharedPrefHelper.load()
             callback.populateFromApi()
         }
     }
 
     @Test
-    fun `if not loaded and prev data valid but expired should call api`() {
-        every { callback.isLoaded } returns false
+    fun `if prev data valid but expired should call api`() {
         every { sharedPrefHelper.load() } returns mockk(relaxed = true)
         every { timeChecker.isDataExpired(any(), any()) } returns true
         run()
         verifySequence {
-            callback.isLoaded
             sharedPrefHelper.load()
             timeChecker.isDataExpired(any(), any())
             callback.populateFromApi()
@@ -73,19 +59,16 @@ class TrendingLoaderTest {
     }
 
     @Test
-    fun `if not loaded and prev data valid should update model, list, and set load flag to true`() {
+    fun `if prev data valid should update model, list, and set load flag to true`() {
         val prevData = mockk<TrendingModel>(relaxed = true)
-        every { callback.isLoaded } returns false
         every { sharedPrefHelper.load() } returns prevData
         every { timeChecker.isDataExpired(any(), any()) } returns false
         run()
         verifySequence {
-            callback.isLoaded
             sharedPrefHelper.load()
             timeChecker.isDataExpired(any(), any())
             callback.updateModel(prevData)
             callback.updateListAndScroll()
-            callback.isLoaded = true
         }
     }
 }

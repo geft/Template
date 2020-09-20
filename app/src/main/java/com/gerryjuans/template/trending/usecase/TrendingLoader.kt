@@ -10,23 +10,16 @@ class TrendingLoader @Inject constructor(
 ) {
 
     fun load(callback: Callback, currentTime: LocalDateTime) {
-        if (callback.isLoaded) {
-            callback.updateListAndScroll()
+        val prevData = sharedPrefHelper.load()
+        if (prevData == null || timeChecker.isDataExpired(prevData.time, currentTime)) {
+            callback.populateFromApi()
         } else {
-            val prevData = sharedPrefHelper.load()
-            if (prevData == null || timeChecker.isDataExpired(prevData.time, currentTime)) {
-                callback.populateFromApi()
-            } else {
-                callback.updateModel(prevData)
-                callback.updateListAndScroll()
-                callback.isLoaded = true
-            }
+            callback.updateModel(prevData)
+            callback.updateListAndScroll()
         }
     }
 
     interface Callback {
-        var isLoaded: Boolean
-
         fun updateModel(data: TrendingModel)
         fun updateListAndScroll()
         fun populateFromApi()
