@@ -1,10 +1,13 @@
 package com.gerryjuans.template.trending
 
 import com.gerryjuans.template.api.GithubRepo
+import com.gerryjuans.template.util.TimeProvider
 import org.threeten.bp.LocalDateTime
 import javax.inject.Inject
 
-class TrendingModel @Inject constructor () {
+class TrendingModel @Inject constructor (
+    private val timeProvider: TimeProvider
+) {
 
     var items: List<GithubRepo> = emptyList()
     var time: LocalDateTime? = null
@@ -18,7 +21,7 @@ class TrendingModel @Inject constructor () {
 
     fun refreshFromApi(items: List<GithubRepo>) {
         this.items = items
-        this.time = LocalDateTime.now()
+        this.time = timeProvider.getCurrentTime()
         this.scrollPosition = 0
     }
 

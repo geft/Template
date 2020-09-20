@@ -1,20 +1,28 @@
 package com.gerryjuans.template.trending
 
 import com.gerryjuans.template.api.GithubRepo
+import com.gerryjuans.template.util.TimeProvider
+import io.mockk.MockKAnnotations
+import io.mockk.every
+import io.mockk.impl.annotations.MockK
 import io.mockk.mockk
 import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Test
 import org.threeten.bp.LocalDateTime
-import org.threeten.bp.temporal.ChronoUnit
 
 class TrendingModelTest {
+
+    @MockK
+    lateinit var timeProvider: TimeProvider
 
     private lateinit var model: TrendingModel
 
     @Before
     fun setUp() {
-        model = TrendingModel()
+        MockKAnnotations.init(this, relaxed = true)
+
+        model = TrendingModel(timeProvider)
     }
 
     @Test
@@ -35,7 +43,7 @@ class TrendingModelTest {
     @Test
     fun `update should replace items`() {
         val items = mockk<List<GithubRepo>>()
-        val newModel = TrendingModel()
+        val newModel = TrendingModel(timeProvider)
         newModel.items = items
         model.update(newModel)
         assertEquals(items, model.items)
@@ -44,7 +52,7 @@ class TrendingModelTest {
     @Test
     fun `update should replace time`() {
         val time = mockk<LocalDateTime>()
-        val newModel = TrendingModel()
+        val newModel = TrendingModel(timeProvider)
         newModel.time = time
         model.update(newModel)
         assertEquals(time, model.time)
@@ -53,7 +61,7 @@ class TrendingModelTest {
     @Test
     fun `update should replace scroll position`() {
         val position = 999
-        val newModel = TrendingModel()
+        val newModel = TrendingModel(timeProvider)
         newModel.scrollPosition = position
         model.update(newModel)
         assertEquals(position, model.scrollPosition)
@@ -68,11 +76,10 @@ class TrendingModelTest {
 
     @Test
     fun `refresh from api should change time to current`() {
+        val currentTime = LocalDateTime.now()
+        every { timeProvider.getCurrentTime() } returns currentTime
         model.refreshFromApi(emptyList())
-        assertEquals(
-            LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES),
-            model.time!!.truncatedTo(ChronoUnit.MINUTES)
-        )
+        assertEquals(currentTime, model.time)
     }
 
     @Test
