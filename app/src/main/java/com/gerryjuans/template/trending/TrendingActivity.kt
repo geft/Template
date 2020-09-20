@@ -1,7 +1,6 @@
 package com.gerryjuans.template.trending
 
 import android.os.Bundle
-import android.os.Handler
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.PopupMenu
@@ -92,7 +91,7 @@ class TrendingActivity : BaseActivity<TrendingView, TrendingPresenter>(), Trendi
     }
 
     override fun scrollTo(position: Int) {
-        Handler().postDelayed({
+        binding.recyclerView.postDelayed({
             layoutManager.scrollToPositionWithOffset(position, 0)
         }, 100)
     }
