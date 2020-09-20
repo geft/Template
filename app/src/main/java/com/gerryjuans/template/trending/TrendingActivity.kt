@@ -91,7 +91,7 @@ class TrendingActivity : BaseActivity<TrendingView, TrendingPresenter>(), Trendi
     }
 
     override fun scrollTo(position: Int) {
-        layoutManager.scrollToPosition(position)
+        layoutManager.scrollToPositionWithOffset(position, 0)
     }
 
     override fun showLoading() {
