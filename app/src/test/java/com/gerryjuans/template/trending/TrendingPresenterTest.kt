@@ -3,6 +3,7 @@ package com.gerryjuans.template.trending
 import com.gerryjuans.template.trending.usecase.TrendingLoader
 import com.gerryjuans.template.trending.usecase.TrendingPopulator
 import com.gerryjuans.template.trending.usecase.TrendingSharedPrefHelper
+import com.gerryjuans.template.util.TimeProvider
 import io.mockk.*
 import io.mockk.impl.annotations.MockK
 import io.reactivex.rxjava3.core.Single
@@ -22,6 +23,9 @@ class TrendingPresenterTest {
     lateinit var loader: TrendingLoader
 
     @MockK
+    lateinit var timeProvider: TimeProvider
+
+    @MockK
     lateinit var view: TrendingView
 
     @MockK
@@ -32,7 +36,7 @@ class TrendingPresenterTest {
     @Before
     fun setUp() {
         MockKAnnotations.init(this, relaxed = true)
-        presenter = TrendingPresenter(model, sharedPrefHelper, populator, loader)
+        presenter = TrendingPresenter(model, sharedPrefHelper, populator, loader, timeProvider)
         presenter.view = view
     }
 
@@ -68,7 +72,7 @@ class TrendingPresenterTest {
         every { populator.getPopulateSingle(view) } returns Single.just(emptyList())
         presenter.populateFromApi()
         verifySequence {
-            model.refreshFromApi(emptyList())
+            model.refreshFromApi(emptyList(), timeProvider)
             sharedPrefHelper.save(any())
             presenter.updateListAndScroll()
             presenter.isLoaded = true

@@ -22,7 +22,7 @@ class TrendingModelTest {
     fun setUp() {
         MockKAnnotations.init(this, relaxed = true)
 
-        model = TrendingModel(timeProvider)
+        model = TrendingModel()
     }
 
     @Test
@@ -43,7 +43,7 @@ class TrendingModelTest {
     @Test
     fun `update should replace items`() {
         val items = mockk<List<GithubRepo>>()
-        val newModel = TrendingModel(timeProvider)
+        val newModel = TrendingModel()
         newModel.items = items
         model.update(newModel)
         assertEquals(items, model.items)
@@ -52,7 +52,7 @@ class TrendingModelTest {
     @Test
     fun `update should replace time`() {
         val time = mockk<LocalDateTime>()
-        val newModel = TrendingModel(timeProvider)
+        val newModel = TrendingModel()
         newModel.time = time
         model.update(newModel)
         assertEquals(time, model.time)
@@ -61,7 +61,7 @@ class TrendingModelTest {
     @Test
     fun `update should replace scroll position`() {
         val position = 999
-        val newModel = TrendingModel(timeProvider)
+        val newModel = TrendingModel()
         newModel.scrollPosition = position
         model.update(newModel)
         assertEquals(position, model.scrollPosition)
@@ -70,7 +70,7 @@ class TrendingModelTest {
     @Test
     fun `refresh from api should replace items`() {
         val items = mockk<List<GithubRepo>>()
-        model.refreshFromApi(items)
+        model.refreshFromApi(items, timeProvider)
         assertEquals(items, model.items)
     }
 
@@ -78,13 +78,13 @@ class TrendingModelTest {
     fun `refresh from api should change time to current`() {
         val currentTime = LocalDateTime.now()
         every { timeProvider.getCurrentTime() } returns currentTime
-        model.refreshFromApi(emptyList())
+        model.refreshFromApi(emptyList(), timeProvider)
         assertEquals(currentTime, model.time)
     }
 
     @Test
     fun `refresh from api should reset scroll position`() {
-        model.refreshFromApi(emptyList())
+        model.refreshFromApi(emptyList(), timeProvider)
         assertEquals(0, model.scrollPosition)
     }
 

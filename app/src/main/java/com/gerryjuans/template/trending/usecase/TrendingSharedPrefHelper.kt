@@ -22,10 +22,6 @@ class TrendingSharedPrefHelper @Inject constructor(
 
     fun load(): TrendingModel? {
         val data = sharedPreferences.getString(KEY_MODEL, null)
-        if (data == null) {
-            return null
-        } else {
-            return gson.fromJson(data, TrendingModel::class.java)
-        }
+        return if (data == null) null else gson.fromJson(data, TrendingModel::class.java)
     }
 }

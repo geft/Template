@@ -7,9 +7,7 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class TrendingModel @Inject constructor (
-    private val timeProvider: TimeProvider
-) {
+class TrendingModel @Inject constructor() {
 
     var items: List<GithubRepo> = emptyList()
     var time: LocalDateTime? = null
@@ -21,7 +19,7 @@ class TrendingModel @Inject constructor (
         this.scrollPosition = data.scrollPosition
     }
 
-    fun refreshFromApi(items: List<GithubRepo>) {
+    fun refreshFromApi(items: List<GithubRepo>, timeProvider: TimeProvider) {
         this.items = items
         this.time = timeProvider.getCurrentTime()
         this.scrollPosition = 0
