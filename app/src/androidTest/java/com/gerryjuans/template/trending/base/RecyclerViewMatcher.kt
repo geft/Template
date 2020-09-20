@@ -10,6 +10,7 @@ import org.hamcrest.TypeSafeMatcher
 
 /**
  * Created by dannyroa on 5/10/15.
+ * https://github.com/dannyroa/espresso-samples/tree/master/RecyclerView/app/src/androidTest/java/com/dannyroa/espresso_samples/recyclerview
  */
 class RecyclerViewMatcher(private val recyclerViewId: Int) {
 

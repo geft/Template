@@ -15,6 +15,7 @@ import org.hamcrest.Matchers;
 
 /**
  * Created by dannyroa on 5/9/15.
+ * https://github.com/dannyroa/espresso-samples/tree/master/RecyclerView/app/src/androidTest/java/com/dannyroa/espresso_samples/recyclerview
  */
 public class TestUtils {
 
