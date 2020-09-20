@@ -1,22 +1,33 @@
 package com.gerryjuans.template.base
 
-import android.app.Application
 import android.util.Log
+import androidx.multidex.MultiDexApplication
 import com.gerryjuans.template.di.AppComponent
 import com.gerryjuans.template.di.DaggerAppComponent
 import com.gerryjuans.template.di.ProviderModule
+import com.google.android.gms.security.ProviderInstaller
 import com.jakewharton.threetenabp.AndroidThreeTen
 
-class BaseApplication : Application() {
+class BaseApplication : MultiDexApplication() {
 
     lateinit var appComponent: AppComponent
 
     override fun onCreate() {
         super.onCreate()
 
+        setupGooglePlayProvider()
         setupUncaughtExceptionHandling()
         initThreeTen()
         initAppComponent()
+    }
+
+    // for Kitkat
+    private fun setupGooglePlayProvider() {
+        try {
+            ProviderInstaller.installIfNeeded(applicationContext);
+        } catch (e: Exception) {
+            Log.e(this.javaClass.name, "Error installing provider", e)
+        }
     }
 
     private fun setupUncaughtExceptionHandling() {

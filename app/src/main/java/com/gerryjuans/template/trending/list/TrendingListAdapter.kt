@@ -1,6 +1,7 @@
 package com.gerryjuans.template.trending.list
 
 import android.content.Context
+import android.os.Build
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -45,13 +46,18 @@ class TrendingListAdapter(
             it.star.text = numberFormat.format(item.stars)
             it.fork.text = numberFormat.format(item.forks)
             it.content.visibility = if (item.expanded) View.VISIBLE else View.GONE
+            adjustElevation(it, item)
+            adjustHeight(it, item)
             it.itemView.setThrottleListener {
                 toggle(item, it.content, it.name.measuredWidth)
-                it.itemView.elevation = if (item.expanded) elevationHeight else 0f
+                adjustElevation(it, item)
             }
-            it.itemView.elevation = if (item.expanded) elevationHeight else 0f
+        }
+    }
 
-            adjustHeight(it, item)
+    private fun adjustElevation(holder: Holder, item: GithubRepo) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            holder.itemView.elevation = if (item.expanded) elevationHeight else 0f
         }
     }
 

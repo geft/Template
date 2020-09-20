@@ -80,8 +80,14 @@ class TrendingActivity : BaseActivity<TrendingView, TrendingPresenter>(), Trendi
     }
 
     override fun updateList(items: List<GithubRepo>) {
+        stopRefreshing()
         listAdapter.updateList(items)
-        binding.containerSwipe.isRefreshing = false
+    }
+
+    private fun stopRefreshing() {
+        binding.containerSwipe.post {
+            binding.containerSwipe.isRefreshing = false
+        }
     }
 
     override fun scrollTo(position: Int) {
