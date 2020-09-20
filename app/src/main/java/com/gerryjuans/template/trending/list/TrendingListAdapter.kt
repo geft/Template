@@ -5,10 +5,12 @@ import android.os.Build
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.gerryjuans.template.api.GithubRepo
 import com.gerryjuans.template.databinding.TrendingItemBinding
-import com.gerryjuans.template.util.loadImage
 import com.gerryjuans.template.util.setThrottleListener
 import java.text.NumberFormat
 import java.util.*
@@ -35,7 +37,7 @@ class TrendingListAdapter(
         val item = items[position]
 
         (holder as Holder).let {
-            if (!item.avatar.isNullOrBlank()) { it.avatar.loadImage(item.avatar) }
+            if (!item.avatar.isNullOrBlank()) { it.avatar.loadAvatar(item.avatar) }
             it.author.text = item.author ?: ""
             it.name.text = item.name ?: ""
             it.description.text = item.description ?: ""
@@ -50,6 +52,12 @@ class TrendingListAdapter(
                 adjustElevation(it, item)
             }
         }
+    }
+
+    private fun ImageView.loadAvatar(url: String) {
+        Glide.with(this).load(url)
+            .diskCacheStrategy(DiskCacheStrategy.RESOURCE)
+            .into(this)
     }
 
     private fun adjustElevation(holder: Holder, item: GithubRepo) {

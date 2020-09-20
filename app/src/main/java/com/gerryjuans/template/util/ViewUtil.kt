@@ -4,7 +4,6 @@ import android.util.Log
 import android.view.View
 import android.widget.ImageView
 import com.bumptech.glide.Glide
-import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.jakewharton.rxbinding4.view.clicks
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import java.util.concurrent.TimeUnit
@@ -18,6 +17,5 @@ fun View.setThrottleListener(action: () -> Unit) {
 
 fun ImageView.loadImage(url: String) {
     Glide.with(this).load(url)
-        .diskCacheStrategy(DiskCacheStrategy.RESOURCE)
         .into(this)
 }

@@ -11,9 +11,9 @@
         android:layout_height="32dp"
         android:src="@drawable/placeholder_avatar"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="21dp"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toTopOf="@id/image_top"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toBottomOf="@id/image_bottom"
         />
 
     <ImageView
@@ -22,7 +22,8 @@
         android:layout_height="12dp"
         android:src="@drawable/placeholder_content"
         android:layout_marginStart="16dp"
-        app:layout_constraintTop_toTopOf="@id/image_avatar"
+        android:layout_marginTop="21dp"
+        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toEndOf="@id/image_avatar"
         />
 
