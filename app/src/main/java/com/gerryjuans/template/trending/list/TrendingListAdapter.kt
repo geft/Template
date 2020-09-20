@@ -5,9 +5,7 @@ import android.os.Build
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
-import com.gerryjuans.template.R
 import com.gerryjuans.template.api.GithubRepo
 import com.gerryjuans.template.databinding.TrendingItemBinding
 import com.gerryjuans.template.util.loadImage
@@ -22,7 +20,6 @@ class TrendingListAdapter(
 
     private val animHelper = TrendingListAnimHelper()
     private val elevationHeight = 4 * context.resources.displayMetrics.density;
-    private val avatarPlaceHolder = ContextCompat.getDrawable(context, R.drawable.placeholder_avatar)
     private val numberFormat = NumberFormat.getNumberInstance(Locale.ENGLISH)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
@@ -38,7 +35,7 @@ class TrendingListAdapter(
         val item = items[position]
 
         (holder as Holder).let {
-            if (!item.avatar.isNullOrBlank()) { it.avatar.loadImage(item.avatar, avatarPlaceHolder) }
+            if (!item.avatar.isNullOrBlank()) { it.avatar.loadImage(item.avatar) }
             it.author.text = item.author ?: ""
             it.name.text = item.name ?: ""
             it.description.text = item.description ?: ""
