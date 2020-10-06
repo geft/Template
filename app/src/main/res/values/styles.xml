@@ -7,39 +7,4 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
-    <style name="TextTitle" parent="TextAppearance.AppCompat">
-        <item name="android:fontFamily">sans-serif-medium</item>
-        <item name="android:textSize">21sp</item>
-        <item name="android:textColor">@color/colorPrimaryDark</item>
-    </style>
-
-    <style name="TextItemName" parent="TextAppearance.AppCompat">
-        <item name="android:fontFamily">sans-serif-medium</item>
-        <item name="android:textSize">15sp</item>
-        <item name="android:textColor">@color/textContent</item>
-    </style>
-
-    <style name="TextContent" parent="TextAppearance.AppCompat">
-        <item name="android:fontFamily">sans-serif</item>
-        <item name="android:textSize">12sp</item>
-        <item name="android:textColor">@color/textContent</item>
-    </style>
-
-    <style name="TextItemAuthor" parent="TextContent"/>
-    <style name="TextItemDescription" parent="TextContent"/>
-    <style name="TextItemLanguage" parent="TextContent"/>
-    <style name="TextItemStar" parent="TextContent"/>
-    <style name="TextItemFork" parent="TextContent"/>
-
-    <style name="TextErrorTitle" parent="TextAppearance.AppCompat">
-        <item name="android:textColor">@color/textPrimary</item>
-        <item name="android:textStyle">bold</item>
-        <item name="android:textSize">18sp</item>
-    </style>
-
-    <style name="TextErrorDescription" parent="TextAppearance.AppCompat">
-        <item name="android:textColor">@color/textSecondary</item>
-        <item name="android:textSize">15sp</item>
-    </style>
-
 </resources>

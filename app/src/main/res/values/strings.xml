@@ -1,9 +1,3 @@
 <resources>
-    <string name="app_name">Trending</string>
-    <string name="trending_title">Trending</string>
-    <string name="sort_stars">Sort by stars</string>
-    <string name="sort_name">Sort by name</string>
-    <string name="error_title">Something went wrong…</string>
-    <string name="error_description">An alien is probably blocking your signal.</string>
-    <string name="error_cta">Retry</string>
+    <string name="app_name">Template</string>
 </resources>
